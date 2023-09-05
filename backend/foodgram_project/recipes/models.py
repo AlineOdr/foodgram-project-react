@@ -1,7 +1,5 @@
-from django.db import models
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
-
+from django.db import models
 
 
 class User(AbstractUser):
@@ -30,6 +28,7 @@ class User(AbstractUser):
         max_length=254, blank=False
     )
 
+
 class Ingredient(models.Model):
     """Модель ингредиентов."""
     name = models.CharField(max_length=200)
@@ -38,10 +37,11 @@ class Ingredient(models.Model):
         max_length=200,
         verbose_name=('Единица измерения')
         )
-    
+
     class Meta:
         verbose_name = ('Ингредиент')
         verbose_name_plural = ('Ингредиенты')
+
 
 class Tag(models.Model):
     """Модель тега."""
@@ -51,15 +51,15 @@ class Tag(models.Model):
         verbose_name=('Цвет')
         )
     slug = models.SlugField(max_length=255,
-                        unique=True,
-        )
-    
+                            unique=True)
+
     class Meta:
         verbose_name = ('Тег')
         verbose_name_plural = ('Теги')
 
     def __str__(self) -> str:
         return self.name
+
 
 class Recipe(models.Model):
     """Модель рецепта."""
@@ -94,7 +94,8 @@ class Recipe(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
+
 class IngredientRecipe(models.Model):
     """Модель ингредиентов, связанных с рецептами."""
     recipe = models.ForeignKey(
@@ -108,9 +109,11 @@ class IngredientRecipe(models.Model):
     amount_of_ingredient = models.PositiveIntegerField(
         verbose_name=('Количество ингредиента')
     )
+
     class Meta:
         verbose_name = ('Ингредиент, связанный с рецептом')
         verbose_name_plural = ('Ингредиенты, связанные с рецептами')
+
 
 class TagRecipe(models.Model):
     """Модель ингредиентов, связанных с рецептами."""
@@ -122,10 +125,12 @@ class TagRecipe(models.Model):
         Tag,
         on_delete=models.CASCADE,
     )
+
     class Meta:
         verbose_name = ('Тег, связанный с рецептом')
         verbose_name_plural = ('Теги, связанные с рецептами')
-   
+
+
 class ShoppingCart(models.Model):
     """Модель списка покупок по рецепту."""
     user = models.ForeignKey(
@@ -141,9 +146,11 @@ class ShoppingCart(models.Model):
         related_name='shopping_cart_recipes',
         verbose_name=('Рецепт')
     )
+
     class Meta:
         verbose_name = ('Список покупок')
         verbose_name_plural = ('Списки покупок')
+
 
 class Favorite(models.Model):
     """Модель избранных рецептов."""
@@ -159,9 +166,11 @@ class Favorite(models.Model):
         related_name='favorite_recipes',
         verbose_name=('Рецепт в избранном')
     )
+
     class Meta:
         verbose_name = ('Избранное')
         verbose_name_plural = ('Избранные')
+
 
 class Follow(models.Model):
     """Модель подписок."""
@@ -177,7 +186,7 @@ class Follow(models.Model):
         related_name='follower',
         verbose_name=('Подписчик')
     )
+
     class Meta:
         verbose_name = ('Подписка')
         verbose_name_plural = ('Подписки')
-

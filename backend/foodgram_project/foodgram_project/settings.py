@@ -1,6 +1,6 @@
-from datetime import timedelta
 import os
 from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -8,9 +8,8 @@ SECRET_KEY = 'wl75t@7f25$cdm^jxf8n)p7lkgt3_^aevwk9oj6su%+z5aqd0!'
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1', 'localhost', 'foodgramaline.hopto.org']
-
-
+ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1',
+                 'localhost', 'foodgramaline.hopto.org']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,8 +21,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'api.apps.ApiConfig', 
-    'recipes.apps.RecipesConfig', 
+    'api.apps.ApiConfig',
+    'recipes.apps.RecipesConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,8 +55,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram_project.wsgi.application'
 
-
-
 DATABASES = {
     'default': {
         # Меняем настройку Django: теперь для работы будет использоваться
@@ -71,25 +68,25 @@ DATABASES = {
     }
 }
 
-
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.'
+        'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
 LANGUAGE_CODE = 'en-us'
 
@@ -115,9 +112,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated', 
+        'rest_framework.permissions.IsAuthenticated',
     ]
-} 
+}
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
@@ -126,8 +123,7 @@ DJOSER = {
     }
 }
 
-#SIMPLE_JWT = {
- #   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-  #  'AUTH_HEADER_TYPES': ('Bearer',),
-#}
-
+# SIMPLE_JWT = {
+#   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+#  'AUTH_HEADER_TYPES': ('Bearer',),
+# }

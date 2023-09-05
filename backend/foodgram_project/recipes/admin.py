@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Recipe, Ingredient, Tag, IngredientRecipe, User, ShoppingCart, Favorite, TagRecipe
+
+from .models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                     ShoppingCart, Tag, TagRecipe, User)
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (
@@ -11,6 +14,7 @@ class UserAdmin(admin.ModelAdmin):
         )
     empty_value_display = '-пусто-'
 
+
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
         'name',
@@ -18,6 +22,7 @@ class IngredientAdmin(admin.ModelAdmin):
     )
     list_filter = ('name',)
     empty_value_display = '-пусто-'
+
 
 class TagAdmin(admin.ModelAdmin):
     list_display = (
@@ -29,13 +34,16 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
+
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
 
+
 class TagRecipeInline(admin.TabularInline):
     model = TagRecipe
     extra = 1
+
 
 class IngredientRecipeAdmin(admin.ModelAdmin):
     list_display = (
@@ -46,6 +54,7 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('recipe', 'ingredient')
 
+
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -53,9 +62,10 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
     )
     list_filter = ('name', 'author', 'tags')
-    inlines = (IngredientRecipeInline,TagRecipeInline)
- #   inlines = (TagRecipeInline,)
+    inlines = (IngredientRecipeInline, TagRecipeInline)
+    #   inlines = (TagRecipeInline,)
     empty_value_display = '-пусто-'
+
 
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = (
@@ -64,12 +74,14 @@ class ShoppingCartAdmin(admin.ModelAdmin):
     )
     empty_value_display = '-пусто-'
 
+
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'recipe',
     )
     empty_value_display = '-пусто-'
+
 
 class TagRecipeAdmin(admin.ModelAdmin):
     list_display = (
@@ -80,6 +92,7 @@ class TagRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'tag',)
     empty_value_display = '-пусто-'
 
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Tag, TagAdmin)
@@ -88,4 +101,3 @@ admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(IngredientRecipe, IngredientRecipeAdmin)
 admin.site.register(TagRecipe, TagRecipeAdmin)
-

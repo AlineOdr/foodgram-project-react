@@ -1,16 +1,14 @@
-from rest_framework import serializers
-from recipes.models import Ingredient, Recipe, Tag, User, IngredientRecipe, ShoppingCart, Favorite, Follow
-from rest_framework.exceptions import ValidationError
-from django.db import IntegrityError
-from django.core.files.base import ContentFile
-from .permissions import AuthorAdminOrReadOnly
-from rest_framework.fields import SerializerMethodField
 from drf_extra_fields.fields import Base64ImageField
-import base64
+from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
+                            Recipe, ShoppingCart, Tag, User)
+from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
+
 
 class UserSerializer(serializers.ModelSerializer):
     """ Сериализатор для пользователей . """
     is_subscribed = SerializerMethodField(read_only=True)
+
     class Meta:
         model = User
         fields = (
@@ -28,7 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
             return False
         return obj.following.filter(user=request.user.id).exists()
 
-
     def create(self, validated_data):
         """Создание нового пользователя"""
         user = User(
@@ -40,86 +37,46 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-    
+
 
 class SubscribedSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Подписок. """
     recipe = serializers.SerializerMethodField(read_only=True)
+
     class Meta(UserSerializer.Meta):
         fields = '__all__'
-# Вывести рецепты пользователя
-
-#class RegisterUserSerializer(serializers.ModelSerializer):
- #   """Сериализатор для регистрации новых пользователей"""
-  #  class Meta:
-   #     fields = (
-    #        'email',
-     #       'id',
-      #      'username',
-       #     'first_name',
-        #    'last_name',
-        #)
-       # model = User
-   # def create(self, validated_data):
-    #    """Создание нового пользователя"""
-     #   try:
-      #      user = User.objects.get_or_create(**validated_data)[0]
-      #  except IntegrityError:
-       #     raise ValidationError('Такие User или Email уже есть')
-       # return user
-
-#class Base64ImageField(serializers.ImageField):
- #   def to_internal_value(self, data):
-        # Если полученный объект строка, и эта строка 
-        # начинается с 'data:image'...
-  #      if isinstance(data, str) and data.startswith('data:image'):
-            # ...начинаем декодировать изображение из base64.
-            # Сначала нужно разделить строку на части.
-   #         format, imgstr = data.split(';base64,')  
-            # И извлечь расширение файла.
-    #        ext = format.split('/')[-1]  
-            # Затем декодировать сами данные и поместить результат в файл,
-            # которому дать название по шаблону.
-     #       data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-
-      #  return super().to_internal_value(data)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Ингредиенты. """
     class Meta:
         model = Ingredient
-        # Указываем поля модели, с которыми будет работать сериализатор;
-        # поля модели, не указанные в перечне, сериализатор будет игнорировать.
-        # Для перечисления полей можно использовать список или кортеж.
         fields = '__all__'
 
 
 class TagSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Теги. """
+
     class Meta:
         model = Tag
-        # Указываем поля модели, с которыми будет работать сериализатор;
-        # поля модели, не указанные в перечне, сериализатор будет игнорировать.
-        # Для перечисления полей можно использовать список или кортеж.
         fields = '__all__'
+
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
     """ Сериализатор для связи модели Рецепты/Ингридиенты. """
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
-    units_of_measurement = serializers.ReadOnlyField(source='ingredient.units_of_measurement')
+    units_of_measurement = serializers.ReadOnlyField(
+                           source='ingredient.units_of_measurement')
+
     class Meta:
         model = IngredientRecipe
-        # Указываем поля модели, с которыми будет работать сериализатор;
-        # поля модели, не указанные в перечне, сериализатор будет игнорировать.
-        # Для перечисления полей можно использовать список или кортеж.
         fields = (
             'id',
-            'name', 
+            'name',
             'units_of_measurement',
             'amount_of_ingredient'
-        )  
+        )
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -127,9 +84,11 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     image = Base64ImageField()
-    ingredients = IngredientRecipeSerializer(many=True,read_only=True, source='ingredientrecipe_set')
+    ingredients = IngredientRecipeSerializer(many=True, read_only=True,
+                                             source='ingredientrecipe_set')
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
+
     class Meta:
         model = Recipe
         fields = (
@@ -144,20 +103,21 @@ class RecipeSerializer(serializers.ModelSerializer):
             "text",
             "cooking_time"
         )
-    
+
     def get_is_favorited(self, obj):
         """ Наличие рецепта в избранном. """
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
         return Favorite.objects.filter(recipe=obj, user=request.user).exists()
-    
+
     def get_is_in_shopping_cart(self, obj):
         """ Наличие рецепта в списке покупок. """
         request = self.context.get('request')
         if not request:
             return False
-        return ShoppingCart.objects.filter(recipe=obj, user=request.user.id).exists()
+        return ShoppingCart.objects.filter(recipe=obj,
+                                           user=request.user.id).exists()
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
@@ -167,24 +127,26 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         fields = '__all__'
         # нужно сделать отображение в списке покупок
 
+
 class FavoriteSerializer(serializers.ModelSerializer):
     """ Сериализатор модели избранных рецептов """
-    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(), write_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
- #   cooking_time = serializers.IntegerField(source='favorite_recipe.cooking_time', read_only=True)
+    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(),
+                                                write_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
+                                              write_only=True)
+
     class Meta:
         model = Favorite
         fields = ('user',
                   'recipe')
         # нужно сделать отображение добавленного в избр
 
+
 class FollowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели подписок """
     user = serializers.SerializerMethodField(read_only=True)
     author = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Follow
         fields = '__all__'
-        # нужно сделать отображение добавленного в избр
-
-
