@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'wl75t@7f25$cdm^jxf8n)p7lkgt3_^aevwk9oj6su%+z5aqd0!'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1', 'localhost', 'foodgramaline.hopto.org']
 
