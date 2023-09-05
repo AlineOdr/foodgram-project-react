@@ -6,13 +6,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'wl75t@7f25$cdm^jxf8n)p7lkgt3_^aevwk9oj6su%+z5aqd0!'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1',
                  'localhost', 'foodgramaline.hopto.org']
-CSRF_TRUSTED_ORIGINS = ['http://foodgramaline.hopto.org',
-                        'http://51.250.100.111'
-                        'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['http://foodgramaline.hopto.org']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
