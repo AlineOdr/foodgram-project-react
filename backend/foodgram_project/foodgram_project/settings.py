@@ -10,6 +10,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1',
                  'localhost', 'foodgramaline.hopto.org']
+CSRF_TRUSTED_ORIGINS = ['http://foodgramaline.hopto.org',
+                        'http://51.250.100.111'
+                        'http://127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
