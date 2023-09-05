@@ -10,7 +10,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1',
                  'localhost', 'foodgramaline.hopto.org']
-CSRF_TRUSTED_ORIGINS = ['http://foodgramaline.hopto.org']
+CSRF_TRUSTED_ORIGINS = ['https://foodgramaline.hopto.org']
 
 
 INSTALLED_APPS = [
