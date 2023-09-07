@@ -173,7 +173,7 @@ class Favorite(models.Model):
 
 
 class Follow(models.Model):
-    """Модель подписок."""
+    """Модель подписок подписок."""
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
