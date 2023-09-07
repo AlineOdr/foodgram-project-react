@@ -53,14 +53,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
 #    filterset_class = IngredientFilter
 
-    def get_queryset(self):
-        recipe = Recipe.objects.all()
-        return recipe
+#    def get_queryset(self):
+#        recipe = Recipe.objects.all()
+#        return recipe
 
     def get_serializer_class(self):
         # Если запрошенное действие (action)
         #  — получение списка объектов ('list')
-        if self.action == 'list':
+        if self.request.method == 'GET':
             # ...то применяем CatListSerializer
             return RecipeSerializer
         # А если запрошенное действие — не 'list', применяем CatSerializer
