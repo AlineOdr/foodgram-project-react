@@ -92,6 +92,7 @@ class TagRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'tag',)
     empty_value_display = '-пусто-'
 
+
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
         'id',
