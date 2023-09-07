@@ -34,7 +34,7 @@ services:
     env_file: .env
     volumes:
       - ./nginx.conf:/etc/nginx/sites-enabled/default
-      - static:/usr/share/nginx/html/static
+      - static:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_volume:/staticfiles/
       - media:/media/
