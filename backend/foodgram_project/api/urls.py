@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 # from rest_framework.authtoken import views
 from .views import (FavoriteViewSet, IngredientViewSet, RecipeViewSet,
-                    ShoppingCartViewSet, TagViewSet, UserViewSet)
+                    ShoppingCartViewSet, TagViewSet, UserViewSet, CustomUserViewSet)
 
 app_name = 'api'
 
@@ -16,6 +16,8 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/shopping_cart',
                 ShoppingCartViewSet, basename='shopping_cart')
 router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
+router.register(r'^users/(?P<author_id>\d+)/subscribe',
+                CustomUserViewSet, basename='follow')
 
 urlpatterns = [
     #    path('api-token-auth/', views.obtain_auth_token),
