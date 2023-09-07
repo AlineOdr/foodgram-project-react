@@ -25,7 +25,7 @@ services:
     image: alinemr/foodgram_frontend  
     env_file: .env
     volumes:
-      - ../frontend/:/app/result_build/
+      - static:/app/result_build/
     depends_on:
       - backend
   gateway:
@@ -33,7 +33,7 @@ services:
     env_file: .env
     volumes:
       - ./nginx.conf:/etc/nginx/sites-enabled/default
-      - ../frontend/build:/usr/share/nginx/html/
+      - static:/usr/share/nginx/html/static
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_volume:/staticfiles/
       - media:/media/
