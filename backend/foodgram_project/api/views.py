@@ -7,9 +7,10 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from .permissions import IsAdmin, IsAdminOrReadOnly
-from .serializers import (FavoriteSerializer, IngredientSerializer,
-                          RecipeSerializer, ShoppingCartSerializer,
-                          TagSerializer, UserSerializer, FollowSerializer)
+from .serializers import (FavoriteSerializer, FollowSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagSerializer,
+                          UserSerializer)
 
 # from .filters import IngredientFilter
 
@@ -77,6 +78,7 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
+
 
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
