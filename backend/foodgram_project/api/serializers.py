@@ -118,6 +118,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return ShoppingCart.objects.filter(recipe=obj,
                                            user=request.user.id).exists()
+    
+class RecipeCreateSerializer(serializers.ModelSerializer):
+    """ Сериализатор для добавления рецепта. """
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
