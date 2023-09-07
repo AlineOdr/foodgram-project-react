@@ -1,11 +1,10 @@
 from django.shortcuts import render
 
 # Импортируем модель, чтобы обратиться к ней
-from .models import Recipes
-
+from .models import Recipe
 
 def index(request):
-    recipes = Recipes.objects.order_by('-pub_date')[:10]
+    recipes = Recipe.objects.order_by('-pub_date')[:10]
     context = {
         'recipes': recipes,
     }
