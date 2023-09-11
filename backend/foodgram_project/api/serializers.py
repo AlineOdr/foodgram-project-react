@@ -60,9 +60,9 @@ class SubscribedShowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         recipes = obj.recipes.all()
         request = self.context.get('request')
-        limit = request.GET.get('recipe_limit')
+        limit = request.query_params.get('recipe_limit')
         if limit:
-            recipes = recipes[:3]
+            recipes = obj.recipes.all()[:(int(limit))]
         return RecipeSerializer(recipes, many=True)
 
     def get_recipes_count(self, obj):

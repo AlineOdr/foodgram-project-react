@@ -93,5 +93,5 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    queryset = Favorite.objects.all()
+    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
