@@ -167,11 +167,11 @@ class FavoriteSerializer(serializers.ModelSerializer):
                   'recipe')
         # нужно сделать отображение добавленного в избр
 
-    class FollowSerializer(serializers.ModelSerializer):
-        """ Сериализатор модели подписок """
-        user = serializers.SerializerMethodField(read_only=True)
-        author = serializers.SerializerMethodField(read_only=True)
+class FollowSerializer(serializers.ModelSerializer):
+    """ Сериализатор модели подписок """
+    user = serializers.SerializerMethodField(read_only=True)
+    author = serializers.SerializerMethodField(read_only=True)
 
-        class Meta:
-            model = Follow
-            fields = '__all__'
+    class Meta:
+        model = Follow
+        fields = '__all__'
