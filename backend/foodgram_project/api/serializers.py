@@ -39,6 +39,27 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class RecipeSubscribeSerializer(serializers.ModelSerializer):
+    """ Сериализатор модели Рецепты. """
+
+    class Meta:
+        model = Recipe
+        fields = (
+            "id",
+            "name",
+            "image",
+            "cooking_time"
+        )
+
+
+class ShoppingCartSerializer(serializers.ModelSerializer):
+    """ Сериализатор модели Списка покупок """
+    class Meta:
+        model = ShoppingCart
+        fields = '__all__'
+        # нужно сделать отображение в списке покупок
+
+
 class SubscribedShowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Подписок. """
     recipe = SerializerMethodField()
@@ -63,7 +84,7 @@ class SubscribedShowSerializer(serializers.ModelSerializer):
         limit = request.query_params.get('recipe_limit')
         if limit:
             recipes = obj.recipes.all()[:(int(limit))]
-        return RecipeSerializer(recipes, many=True)
+        return RecipeSubscribeSerializer(recipes, many=True)
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -140,18 +161,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return ShoppingCart.objects.filter(recipe=obj,
                                            user=request.user.id).exists()
-
-
-#    class RecipeCreateSerializer(serializers.ModelSerializer):
-#   """ Сериализатор для добавления рецепта. """
-
-
-class ShoppingCartSerializer(serializers.ModelSerializer):
-    """ Сериализатор модели Списка покупок """
-    class Meta:
-        model = ShoppingCart
-        fields = '__all__'
-        # нужно сделать отображение в списке покупок
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
