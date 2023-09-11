@@ -22,6 +22,7 @@ class CustomUserViewSet(UserViewSet):
     permission_classes = (IsAdmin,)
     lookup_field = 'username'
     http_method_names = ['get', 'post', 'patch', 'delete']
+    pagination_class = RecipesPagination
 
     def profile_follow(self, request, username):
         #    user = request.user
@@ -31,7 +32,9 @@ class CustomUserViewSet(UserViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
     def subscriptions(self, request):
-        page = self.paginate_queryset(self.queryset)
+        user = request.user
+        queryset = User.objects.filter(follower=user)
+        page = self.paginate_queryset(queryset)
         serializer = SubscribedShowSerializer(
                 page, many=True,
                 context={'request': request})

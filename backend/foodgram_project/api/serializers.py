@@ -41,8 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SubscribedShowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Подписок. """
-    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(),
-                                                write_only=True)
+    recipe = SerializerMethodField()
     recipes_count = SerializerMethodField(read_only=True)
 
     class Meta:
@@ -61,9 +60,7 @@ class SubscribedShowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         recipes = obj.recipes.all()
         request = self.context.get('request')
-        return RecipeSerializer(recipes, many=True,
-                                context={'request': request}
-                                ).data
+        return RecipeSerializer(recipes, many=True)
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
