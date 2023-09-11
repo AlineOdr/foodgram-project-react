@@ -6,7 +6,7 @@ from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
-from .pagination import RecipesPagination
+from .pagination import RecipesPagination, SubscriptionsPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
@@ -85,3 +85,4 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FollowSerializer
+    pagination_class = SubscriptionsPagination
