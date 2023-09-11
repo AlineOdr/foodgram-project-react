@@ -17,7 +17,7 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/shopping_cart',
                 ShoppingCartViewSet, basename='shopping_cart')
 router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
-router.register(r'^users/(?P<author_id>\d+)/subscribe',
+router.register(r'^users/(?P<author_id>\d+)/subscriptions',
                 CustomUserViewSet, basename='follow')
 
 urlpatterns = [

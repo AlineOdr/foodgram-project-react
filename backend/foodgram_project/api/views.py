@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
-                            Tag, User)
+                            Tag, User, Sub)
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
@@ -11,7 +11,7 @@ from .permissions import IsAdmin, IsAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
-                          UserSerializer)
+                          UserSerializer, SubscribedShowSerializer)
 
 # from .filters import IngredientFilter
 
@@ -29,6 +29,13 @@ class CustomUserViewSet(UserViewSet):
         if author != request.user:
             Follow.objects.get_or_create(user=request.user, author=author)
         return Response(status=status.HTTP_201_CREATED)
+    
+    def subscriptions(self, request):
+        page = self.paginate_queryset(queryset)
+        serializer = SubscribedShowSerializer(
+                page, many=True,
+                context={'request': request})
+            return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -85,4 +92,3 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FollowSerializer
-    pagination_class = SubscriptionsPagination

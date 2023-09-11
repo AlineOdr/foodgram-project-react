@@ -39,12 +39,35 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class SubscribedSerializer(serializers.ModelSerializer):
+class SubscribedShowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Подписок. """
-    recipe = serializers.SerializerMethodField(read_only=True)
+    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(),
+                                                write_only=True)
+    recipes_count = SerializerMethodField(read_only=True)
 
-    class Meta(UserSerializer.Meta):
-        fields = '__all__'
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed',
+            'recipes',
+            'recipes_count'
+        )
+
+    def get_recipes(self, obj):
+        recipes = obj.recipes.all()
+        request = self.context.get('request')
+        return RecipeSerializer(
+        recipes, many=True,
+        context={'request': request}
+    ).data
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
+
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -146,11 +169,11 @@ class FavoriteSerializer(serializers.ModelSerializer):
         # нужно сделать отображение добавленного в избр
 
 
-class FollowSerializer(serializers.ModelSerializer):
-    """ Сериализатор модели подписок """
-    user = serializers.SerializerMethodField(read_only=True)
-    author = serializers.SerializerMethodField(read_only=True)
+    class FollowSerializer(serializers.ModelSerializer):
+        """ Сериализатор модели подписок """
+        user = serializers.SerializerMethodField(read_only=True)
+        author = serializers.SerializerMethodField(read_only=True)
 
-    class Meta:
-        model = Follow
-        fields = '__all__'
+        class Meta:
+            model = Follow
+            fields = '__all__'
