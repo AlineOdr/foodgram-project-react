@@ -11,6 +11,7 @@ from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
                           UserSerializer)
+from .pagination import RecipesPagination
 
 # from .filters import IngredientFilter
 
@@ -51,6 +52,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
+    pagination_class = RecipesPagination
 #    filterset_class = IngredientFilter
 
 #    def get_queryset(self):
