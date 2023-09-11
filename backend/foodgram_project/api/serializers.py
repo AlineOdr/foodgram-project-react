@@ -167,6 +167,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
                   'recipe')
         # нужно сделать отображение добавленного в избр
 
+
 class FollowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели подписок """
     user = serializers.SerializerMethodField(read_only=True)
