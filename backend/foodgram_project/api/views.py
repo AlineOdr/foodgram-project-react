@@ -6,12 +6,12 @@ from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
+from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
                           UserSerializer)
-from .pagination import RecipesPagination
 
 # from .filters import IngredientFilter
 
