@@ -17,9 +17,8 @@ class UserAdmin(admin.ModelAdmin):
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'name',
-        'measurement_unit',
+        'units_of_measurement',
     )
     list_filter = ('name',)
     empty_value_display = '-пусто-'
