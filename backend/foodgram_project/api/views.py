@@ -96,5 +96,12 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    queryset = Follow.objects.all()
-    serializer_class = SubscribedShowSerializer
+    """ Отображение подписок. """
+    def subscriptions(self, request):
+        user = request.user
+        queryset = User.objects.filter(following=user)
+        page = self.paginate_queryset(queryset)
+        serializer = SubscribedShowSerializer(
+            page, many=True,
+            context={'request': request})
+        return self.get_paginated_response(serializer.data)

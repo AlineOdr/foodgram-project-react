@@ -22,9 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        if not request:
+        if request is None:
             return False
-        return obj.following.filter(user=request.user.id).exists()
+        return Follow.objects.filter(user=request.user.id).exists()
 
     def create(self, validated_data):
         """Создание нового пользователя"""
@@ -194,3 +194,8 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return SubscribedShowSerializer(instance.author, context={
+            'request': self.context.get('request')
+        }).data
