@@ -85,10 +85,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class ShoppingCartViewSet(viewsets.ModelViewSet):
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
-    
+
 #    def downloadshopping_cart(self, request):
 #        user = request.user
-
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
