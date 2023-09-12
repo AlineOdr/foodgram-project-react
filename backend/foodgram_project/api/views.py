@@ -31,14 +31,14 @@ class CustomUserViewSet(UserViewSet):
             Follow.objects.get_or_create(user=request.user, author=author)
         return Response(status=status.HTTP_201_CREATED)
 
-    def subscriptions(self, request):
-        user = request.user
-        queryset = User.objects.filter(following=user)
-        page = self.paginate_queryset(queryset)
-        serializer = SubscribedShowSerializer(
-                page, many=True,
-                context={'request': request})
-        return self.get_paginated_response(serializer.data)
+#    def subscriptions(self, request):
+ #       user = request.user
+  #      queryset = User.objects.filter(following=user)
+   #     page = self.paginate_queryset(queryset)
+    #    serializer = SubscribedShowSerializer(
+     #           page, many=True,
+      #          context={'request': request})
+       # return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
