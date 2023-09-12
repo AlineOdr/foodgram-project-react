@@ -4,19 +4,28 @@ import settings
 from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
 
+def read_ingredients():
+    with open(os.path.join(settings.BASE_DIR, 'data', 'ingredients.json'),
+              'r', encoding='utf-8') as file:
+        data = json.load(file)
+        for i in range(len(data)):
+            Ingredient.objects.get_or_create(
+                name=data[i].get("name"),
+                measurement_unit=data[i].get("measurement_unit")
+            )
+def read_tags():
+    with open(os.path.join(settings.BASE_DIR, 'data', 'tags.json'),
+              'r', encoding='utf-8') as f:
+        data = json.load(f)
+        for i in range(len(data)):
+            Tag.objects.get_or_create(
+                name=data[i].get("name"),
+                slug=data[i].get("slug"),
+                color=data[i].get("color")
+            )
 
 class Command(BaseCommand):
-    help = 'Transserfing from csv to database'
 
     def handle(self, *args, **options):
-        for model, file in Ingredient.items():
-            with open(
-                    f'{settings.BASE_DIR}/data/{file}',
-                    encoding='utf-8',
-            ) as file:
-                reader = csv.reader(file)
-                for row in reader:
-                    Ingredient.objects.create(
-                        name=row['name'],
-                        units_of_measurement=row['units_of'
-                                                 '_measurement'],)
+        read_ingredients()
+        read_tags()

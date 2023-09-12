@@ -33,7 +33,7 @@ class Ingredient(models.Model):
     """Модель ингредиентов."""
     name = models.CharField(max_length=200)
 #    quantity = models.PositiveIntegerField()
-    units_of_measurement = models.TextField(
+    measurement_unit = models.TextField(
         max_length=200,
         verbose_name=('Единица измерения')
         )
