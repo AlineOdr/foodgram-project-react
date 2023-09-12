@@ -8,10 +8,10 @@ from rest_framework.response import Response
 
 from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
-from .serializers import (FavoriteSerializer, FollowSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, SubscribedShowSerializer,
-                          TagSerializer, UserSerializer)
+from .serializers import (FavoriteSerializer, IngredientSerializer,
+                          RecipeSerializer, ShoppingCartSerializer,
+                          SubscribedShowSerializer, TagSerializer,
+                          UserSerializer)
 
 # from .filters import IngredientFilter
 
@@ -32,13 +32,13 @@ class CustomUserViewSet(UserViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
 #    def subscriptions(self, request):
- #       user = request.user
-  #      queryset = User.objects.filter(following=user)
-   #     page = self.paginate_queryset(queryset)
-    #    serializer = SubscribedShowSerializer(
-     #           page, many=True,
-      #          context={'request': request})
-       # return self.get_paginated_response(serializer.data)
+#       user = request.user
+#      queryset = User.objects.filter(following=user)
+#     page = self.paginate_queryset(queryset)
+#    serializer = SubscribedShowSerializer(
+#           page, many=True,
+#          context={'request': request})
+# return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -97,4 +97,4 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Follow.objects.all()
-    serializer_class = FollowSerializer
+    serializer_class = SubscribedShowSerializer
