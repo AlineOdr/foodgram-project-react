@@ -1,8 +1,10 @@
-import csv
+import json
+import os
 
 import settings
 from django.core.management.base import BaseCommand
-from recipes.models import Ingredient
+from recipes.models import Ingredient, Tag
+
 
 def read_ingredients():
     with open(os.path.join(settings.BASE_DIR, 'data', 'ingredients.json'),
@@ -13,6 +15,8 @@ def read_ingredients():
                 name=data[i].get("name"),
                 measurement_unit=data[i].get("measurement_unit")
             )
+
+
 def read_tags():
     with open(os.path.join(settings.BASE_DIR, 'data', 'tags.json'),
               'r', encoding='utf-8') as f:
@@ -23,6 +27,7 @@ def read_tags():
                 slug=data[i].get("slug"),
                 color=data[i].get("color")
             )
+
 
 class Command(BaseCommand):
 
