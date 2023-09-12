@@ -21,7 +21,7 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
 router.register(r'^users/subscriptions',
                 CustomUserViewSet, basename='follow')
-router.register(r'^users/(?P<author_id>\d+)/subscriptions',
+router.register(r'^users/(?P<author_id>\d+)/subscribe',
                 CustomUserViewSet, basename='follow')
 
 urlpatterns = [
