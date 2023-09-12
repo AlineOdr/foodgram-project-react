@@ -133,19 +133,19 @@ class TagRecipe(models.Model):
 
 class ShoppingCart(models.Model):
     """Модель списка покупок по рецепту."""
-#    user = models.ForeignKey(
-#        User,
-#        on_delete=models.CASCADE,
-#        related_name='shopping_cart_user',
-#        null=True,
-#        verbose_name=('Покупатель')
-#    )
-#    recipe = models.ForeignKey(
-#        Recipe,
-#        on_delete=models.CASCADE,
-#        related_name='shopping_cart_recipes',
-#        verbose_name=('Рецепт')
-#    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart_user',
+        null=True,
+        verbose_name=('Покупатель')
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart_recipes',
+        verbose_name=('Рецепт')
+    )
 
     class Meta:
         verbose_name = ('Список покупок')
