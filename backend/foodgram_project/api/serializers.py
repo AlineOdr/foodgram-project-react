@@ -61,7 +61,8 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
 
 
 class SubscribedShowSerializer(serializers.ModelSerializer):
-    """ Сериализатор модели Подписок. """
+    """ Сериализатор модели Подписок (список). """
+    is_subscribed = serializers.SerializerMethodField()
     recipe = SerializerMethodField()
     recipes_count = SerializerMethodField(read_only=True)
 
@@ -77,6 +78,12 @@ class SubscribedShowSerializer(serializers.ModelSerializer):
             'recipes',
             'recipes_count'
         )
+
+    def get_is_subscribed(self, obj):
+        return (
+            self.context.get('request').user.is_authenticated
+            and Follow.objects.filter(user=self.context['request'].user,
+                                      author=obj).exists())
 
     def get_recipes(self, obj):
         recipes = obj.recipes.all()
