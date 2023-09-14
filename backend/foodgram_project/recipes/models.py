@@ -174,19 +174,27 @@ class Favorite(models.Model):
 
 class Follow(models.Model):
     """Модель подписок подписок."""
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='following',
-        verbose_name=('Автор')
-    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='follower',
         verbose_name=('Подписчик')
     )
+    following = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name=('Автор')
+    )
 
     class Meta:
         verbose_name = ('Подписка')
         verbose_name_plural = ('Подписки')
+        constraints = [models.CheckConstraint(
+            check=~models.Q(following=models.F('user')),
+            name='cannot subscribe to yourself'),
+            models.UniqueConstraint(name='unique_subscribe',
+                                    fields=['user', 'following'],)]
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.following}'

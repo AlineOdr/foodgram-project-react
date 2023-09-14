@@ -3,18 +3,22 @@ from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
-from rest_framework import status, viewsets
-from rest_framework.generics import ListAPIView
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.response import Response
 
 from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
-from .serializers import (FavoriteSerializer, IngredientSerializer,
-                          RecipeSerializer, ShoppingCartSerializer,
-                          SubscribedShowSerializer, TagSerializer,
+from .serializers import (FavoriteSerializer, FollowSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagSerializer,
                           UserSerializer)
 
 # from .filters import IngredientFilter
+
+
+class GetPostViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    pass
 
 
 class CustomUserViewSet(UserViewSet):
@@ -98,13 +102,23 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     serializer_class = FavoriteSerializer
 
 
-class FollowViewSet(ListAPIView):
+class FollowViewSet(GetPostViewSet):
     """ Отображение подписок. """
-    def subscriptions(self, request):
-        user = request.user
-        queryset = User.objects.filter(following=user)
-        page = self.paginate_queryset(queryset)
-        serializer = SubscribedShowSerializer(
-            page, many=True,
-            context={'request': request})
-        return self.get_paginated_response(serializer.data)
+    serializer_class = FollowSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('following__username',)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.follower.all()
+#    def subscriptions(self, request):
+#       user = request.user
+#      queryset = User.objects.filter(following=user)
+#     page = self.paginate_queryset(queryset)
+#    serializer = SubscribedShowSerializer(
+#       page, many=True,
+#      context={'request': request})
+#        return self.get_paginated_response(serializer.data)
