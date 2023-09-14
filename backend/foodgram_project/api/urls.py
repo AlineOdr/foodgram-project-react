@@ -20,7 +20,7 @@ router.register(r'^recipes/download_shopping_cart',
 router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
 router.register(r'^users/subscriptions',
-                FollowViewSet, basename='follow')
+                CustomUserViewSet, basename='follow')
 router.register(r'^users/(?P<author_id>\d+)/subscribe',
                 CustomUserViewSet, basename='follow')
 
