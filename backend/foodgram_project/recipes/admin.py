@@ -93,8 +93,6 @@ class TagRecipeAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-
-
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Tag, TagAdmin)

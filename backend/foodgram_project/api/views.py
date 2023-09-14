@@ -1,17 +1,14 @@
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
-                            Tag, User)
-from rest_framework import filters, mixins, status, viewsets
-from rest_framework.response import Response
+from recipes.models import (Favorite, Ingredient, Recipe, ShoppingCart, Tag,
+                            User)
+from rest_framework import mixins, viewsets
 
 from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
-from .serializers import (FavoriteSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, TagSerializer,
-                          UserSerializer)
+from .serializers import (FavoriteSerializer, IngredientSerializer,
+                          RecipeSerializer, ShoppingCartSerializer,
+                          TagSerializer, UserSerializer)
 
 # from .filters import IngredientFilter
 
@@ -94,5 +91,3 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-
-
