@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (Favorite, Follow, Ingredient, IngredientRecipe, Recipe,
+from .models import (Favorite, Ingredient, IngredientRecipe, Recipe,
                      ShoppingCart, Tag, TagRecipe, User)
 
 
@@ -59,9 +59,9 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'following',
+        'author',
     )
-    list_filter = ('name', 'following', 'tags')
+    list_filter = ('name', 'author', 'tags')
     inlines = (IngredientRecipeInline, TagRecipeInline)
     #   inlines = (TagRecipeInline,)
     empty_value_display = '-пусто-'
@@ -93,13 +93,6 @@ class TagRecipeAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class FollowAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'user',
-        'following',
-    )
-    empty_value_display = '-пусто-'
 
 
 admin.site.register(Recipe, RecipeAdmin)
@@ -110,4 +103,3 @@ admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(IngredientRecipe, IngredientRecipeAdmin)
 admin.site.register(TagRecipe, TagRecipeAdmin)
-admin.site.register(Follow, FollowAdmin)

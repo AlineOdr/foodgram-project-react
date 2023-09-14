@@ -63,7 +63,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     """Модель рецепта."""
-    following = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='recipe',
@@ -172,29 +172,3 @@ class Favorite(models.Model):
         verbose_name_plural = ('Избранные')
 
 
-class Follow(models.Model):
-    """Модель подписок подписок."""
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='follower',
-        verbose_name=('Подписчик')
-    )
-    following = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='following',
-        verbose_name=('Автор')
-    )
-
-    class Meta:
-        verbose_name = ('Подписка')
-        verbose_name_plural = ('Подписки')
-        constraints = [models.CheckConstraint(
-            check=~models.Q(following=models.F('user')),
-            name='cannot subscribe to yourself'),
-            models.UniqueConstraint(name='unique_subscribe',
-                                    fields=['user', 'following'],)]
-
-    def __str__(self):
-        return f'{self.user} подписан на {self.following}'
