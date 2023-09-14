@@ -12,7 +12,7 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
                           RecipeSerializer, ShoppingCartSerializer,
                           SubscribedShowSerializer, TagSerializer,
                           UserSerializer)
-
+from rest_framework.generics import ListAPIView
 # from .filters import IngredientFilter
 
 
@@ -68,6 +68,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 #    def get_queryset(self):
 #        recipe = Recipe.objects.all()
 #        return recipe
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
         # Если запрошенное действие (action)
@@ -95,7 +97,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     serializer_class = FavoriteSerializer
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class FollowViewSet(ListAPIView):
     """ Отображение подписок. """
     def subscriptions(self, request):
         user = request.user
