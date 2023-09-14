@@ -1,7 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
                             Recipe, ShoppingCart, Tag, User)
-from rest_framework import serializers
+from rest_framework import serializers, validators
 from rest_framework.fields import SerializerMethodField
 
 
@@ -186,11 +186,46 @@ class FavoriteSerializer(serializers.ModelSerializer):
         # нужно сделать отображение добавленного в избр
 
 
-#    class FollowSerializer(serializers.ModelSerializer):
-#    """ Сериализатор модели подписок"""
-#    class Meta:
-#        model = Follow
-#        fields = ('user', 'following')
+class FollowSerializer(serializers.ModelSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+    recipe = SerializerMethodField()
+    recipes_count = SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed',
+            'recipes',
+            'recipes_count'
+        )
+        model = User
+        validators = (validators.UniqueTogetherValidator(
+                    queryset=Follow.objects.all(),
+                    fields=('user', 'author',),
+                    message='Нельзя подписываться дважды на одного автора!'
+                    ),)
+
+    def validate(self, data):
+        if self.context.get('request').user == data['author']:
+            raise serializers.ValidationError(
+                'Вы не можете быть подписаны на самого себя!')
+        return data
+
+    def get_recipes(self, obj):
+        recipes = obj.recipes.all()
+        request = self.context.get('request')
+        limit = request.query_params.get('recipe_limit')
+        if limit:
+            recipes = obj.recipes.all()[:(int(limit))]
+        serializer = RecipeSubscribeSerializer(recipes, many=True)
+        return serializer.data
+
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
 #        validators = (validators.UniqueTogetherValidator(
 #                      queryset=Follow.objects.all(),
 #                      fields=('user', 'following',),

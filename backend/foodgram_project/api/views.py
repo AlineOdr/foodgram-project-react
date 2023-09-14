@@ -1,14 +1,18 @@
+#    from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Ingredient, Recipe, ShoppingCart, Tag,
-                            User)
-from rest_framework import mixins, viewsets
+from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
+                            Tag, User)
+from rest_framework import mixins, status, viewsets
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 
 from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
-from .serializers import (FavoriteSerializer, IngredientSerializer,
-                          RecipeSerializer, ShoppingCartSerializer,
-                          TagSerializer, UserSerializer)
+from .serializers import (FavoriteSerializer, FollowSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagSerializer,
+                          UserSerializer)
 
 # from .filters import IngredientFilter
 
@@ -91,3 +95,15 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
+
+
+class FollowViewSet(viewsets.ModelViewSet):
+    serializer_class = FollowSerializer
+    pagination_class = RecipesPagination
+
+    def profile_follow(request, username):
+        user = request.user
+        author = get_object_or_404(User, username=username)
+        follow = Follow.objects.create(user=user, author=author)
+        serializer = FollowSerializer(follow)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
