@@ -98,7 +98,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
-    model=Follow
+    model = Follow
 
 #    def get_queryset(self):
 #        authors = self.request.user.follower.values('author').all()
