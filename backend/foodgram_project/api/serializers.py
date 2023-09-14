@@ -186,7 +186,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         # нужно сделать отображение добавленного в избр
 
 
-class Followerializer(serializers.ModelSerializer):
+class FollowSerializer(serializers.ModelSerializer):
     """ Сериализатор модели подписок"""
     class Meta:
         model = Follow
