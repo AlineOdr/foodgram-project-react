@@ -1,4 +1,4 @@
-#    from django.http import HttpResponse
+from django.shortcuts import get_list_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
@@ -110,8 +110,7 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        serializer = FollowSerializer(follow)
 #        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        authors = self.request.user.follower.values('author').all()
-        return User.objects.filter(id__in=authors).prefetch_related('recipes')
+        return get_list_or_404(User, following_user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
