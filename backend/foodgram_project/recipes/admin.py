@@ -59,7 +59,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'author',
+        'following',
     )
     list_filter = ('name', 'following', 'tags')
     inlines = (IngredientRecipeInline, TagRecipeInline)
