@@ -171,6 +171,7 @@ class Favorite(models.Model):
         verbose_name = ('Избранное')
         verbose_name_plural = ('Избранные')
 
+
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
