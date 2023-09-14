@@ -20,9 +20,9 @@ router.register(r'^recipes/download_shopping_cart',
 router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
 router.register(r'^users/subscriptions',
-                CustomUserViewSet, basename='follow')
+                CustomUserViewSet)
 router.register(r'^users/(?P<author_id>\d+)/subscribe',
-                CustomUserViewSet, basename='follow')
+                CustomUserViewSet)
 
 urlpatterns = [
     #    path('api-token-auth/', views.obtain_auth_token),
