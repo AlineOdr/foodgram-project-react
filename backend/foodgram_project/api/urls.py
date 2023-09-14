@@ -22,7 +22,7 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
 router.register(r'^users/subscriptions',
                 CustomUserViewSet)
 router.register(r'^users/(?P<author_id>\d+)/subscribe',
-                FollowViewSet, basename='subscribe')
+                CustomUserViewSet, basename='subscribe')
 
 urlpatterns = [
     #    path('api-token-auth/', views.obtain_auth_token),
