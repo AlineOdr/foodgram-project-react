@@ -61,7 +61,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'name',
         'author',
     )
-    list_filter = ('name', 'author', 'tags')
+    list_filter = ('name', 'following', 'tags')
     inlines = (IngredientRecipeInline, TagRecipeInline)
     #   inlines = (TagRecipeInline,)
     empty_value_display = '-пусто-'
