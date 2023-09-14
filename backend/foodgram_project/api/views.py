@@ -107,7 +107,7 @@ class FollowViewSet(viewsets.ModelViewSet):
         follow = Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer(follow)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+
 #     def get_serializer_class(self, request):
 #       user = request.user
 #      queryset = User.objects.filter(following=user)
