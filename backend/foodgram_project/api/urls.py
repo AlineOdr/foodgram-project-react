@@ -2,9 +2,9 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 # from rest_framework.authtoken import views
-from .views import (CustomUserViewSet, FavoriteViewSet, IngredientViewSet,
-                    RecipeViewSet, ShoppingCartViewSet, TagViewSet,
-                    UserViewSet)
+from .views import (CustomUserViewSet, FavoriteViewSet, FollowViewSet,
+                    IngredientViewSet, RecipeViewSet, ShoppingCartViewSet,
+                    TagViewSet, UserViewSet)
 
 app_name = 'api'
 
@@ -22,7 +22,7 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
 router.register(r'^users/subscriptions',
                 CustomUserViewSet)
 router.register(r'^users/(?P<author_id>\d+)/subscribe',
-                CustomUserViewSet)
+                FollowViewSet)
 
 urlpatterns = [
     #    path('api-token-auth/', views.obtain_auth_token),
