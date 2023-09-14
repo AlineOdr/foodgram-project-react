@@ -98,6 +98,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
+    model=Follow
 
 #    def get_queryset(self):
 #        authors = self.request.user.follower.values('author').all()
@@ -110,7 +111,7 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        serializer = FollowSerializer(follow)
 #        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        return get_list_or_404(User, following_user=self.request.user)
+        return get_list_or_404(User, following=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
