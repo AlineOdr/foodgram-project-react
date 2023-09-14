@@ -189,10 +189,10 @@ class Follow(models.Model):
         verbose_name = ('Подписчик')
         verbose_name_plural = ('Подписчики')
         constraints = [models.CheckConstraint(
-            check=~models.Q(following=models.F('user')),
+            check=~models.Q(author=models.F('user')),
             name='cannot subscribe to yourself'),
             models.UniqueConstraint(name='unique_subscribe',
-                                    fields=['user', 'following'],)]
+                                    fields=['user', 'author'],)]
 
     def __str__(self):
-        return f'{self.user} подписан на {self.following}'
+        return f'{self.user} подписан на {self.author}'
