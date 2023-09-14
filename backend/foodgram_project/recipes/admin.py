@@ -6,10 +6,11 @@ from .models import (Favorite, Follow, Ingredient, IngredientRecipe, Recipe,
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-            'email',
-            'username',
-            'first_name',
-            'last_name',
+        'id'
+        'email',
+        'username',
+        'first_name',
+        'last_name',
         )
     empty_value_display = '-пусто-'
 
@@ -94,6 +95,7 @@ class TagRecipeAdmin(admin.ModelAdmin):
 
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'user',
         'following',
     )
