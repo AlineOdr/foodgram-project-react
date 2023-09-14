@@ -202,6 +202,9 @@ class FollowSerializer(serializers.ModelSerializer):
             'recipes',
             'recipes_count'
         )
+        read_only_fields = ('email', 'id', 'username', 'first_name',
+                            'last_name', 'is_subscribed', 'recipes',
+                            'recipes_count')
         model = User
         validators = (validators.UniqueTogetherValidator(
                     queryset=Follow.objects.all(),
