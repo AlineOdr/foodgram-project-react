@@ -4,6 +4,7 @@ from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
 from rest_framework import status, viewsets
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from .pagination import RecipesPagination
@@ -12,7 +13,7 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
                           RecipeSerializer, ShoppingCartSerializer,
                           SubscribedShowSerializer, TagSerializer,
                           UserSerializer)
-from rest_framework.generics import ListAPIView
+
 # from .filters import IngredientFilter
 
 
