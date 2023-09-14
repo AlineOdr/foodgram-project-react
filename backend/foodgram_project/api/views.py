@@ -75,7 +75,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 #        recipe = Recipe.objects.all()
 #        return recipe
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(following=self.request.user.id)
 
     def get_serializer_class(self):
         # Если запрошенное действие (action)
