@@ -110,7 +110,7 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        serializer = FollowSerializer(follow)
 #        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        authors = self.request.user.subscribers.values('author').all()
+        authors = self.request.user.follower.values('author').all()
         return User.objects.filter(id__in=authors).prefetch_related('recipes')
 
     def get_serializer_context(self):
