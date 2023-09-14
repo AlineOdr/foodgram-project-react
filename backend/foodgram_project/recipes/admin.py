@@ -96,8 +96,8 @@ class TagRecipeAdmin(admin.ModelAdmin):
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'author',
         'user',
+        'following',
     )
     empty_value_display = '-пусто-'
 
