@@ -199,7 +199,7 @@ class FollowSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'is_subscribed',
-            'recipes',
+            'recipe',
             'recipes_count'
         )
         read_only_fields = ('email', 'id', 'username', 'first_name',
