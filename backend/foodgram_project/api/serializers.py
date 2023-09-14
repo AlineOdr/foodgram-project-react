@@ -60,43 +60,43 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         # нужно сделать отображение в списке покупок
 
 
-#    class SubscribedShowSerializer(serializers.ModelSerializer):
-#    """ Сериализатор модели Подписок (список). """
-#    is_subscribed = serializers.SerializerMethodField()
-#    recipe = SerializerMethodField()
-#    recipes_count = SerializerMethodField(read_only=True)
+class FollowShowSerializer(serializers.ModelSerializer):
+    """ Сериализатор модели Подписок (список). """
+    is_subscribed = serializers.SerializerMethodField()
+    recipe = SerializerMethodField()
+    recipes_count = SerializerMethodField()
 
-#   class Meta:
-#       model = User
-#       fields = (
-#          'email',
-#         'id',
-#        'username',
-#       'first_name',
-#      'last_name',
-#     'is_subscribed',
-#    'recipes',
-#   'recipes_count'
-#    )
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed',
+            'recipes',
+            'recipes_count'
+        )
 
-#    def get_is_subscribed(self, obj):
-#        return (
-#            self.context.get('request').user.is_authenticated
-#            and Follow.objects.filter(user=self.context['request'].user,
-#                                      author=obj).exists())
+    def get_is_subscribed(self, obj):
+        return (
+            self.context.get('request').user.is_authenticated
+            and Follow.objects.filter(user=self.context['request'].user,
+                                      author=obj).exists())
 
-#    def get_recipes(self, obj):
-#        recipes = obj.recipes.all()
-#        request = self.context.get('request')
-#        limit = request.query_params.get('recipe_limit')
-#        if limit:
-#            recipes = obj.recipes.all()[:(int(limit))]
-#        serializer = RecipeSubscribeSerializer(recipes, many=True)
-#        print(serializer.data)
-#        return serializer.data#
+    def get_recipes(self, obj):
+        recipes = obj.recipes.all()
+        request = self.context.get('request')
+        limit = request.query_params.get('recipe_limit')
+        if limit:
+            recipes = obj.recipes.all()[:(int(limit))]
+        serializer = RecipeSubscribeSerializer(recipes, many=True)
+        print(serializer.data)
+        return serializer.data
 
-#    def get_recipes_count(self, obj):
-#        return obj.recipes.count()
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -186,55 +186,18 @@ class FavoriteSerializer(serializers.ModelSerializer):
         # нужно сделать отображение добавленного в избр
 
 
-class FollowSerializer(serializers.ModelSerializer):
-    """ Сериализатор модели подписок """
-    user = serializers.SlugRelatedField(
-        slug_field='username', queryset=User.objects.all(),
-        default=serializers.CurrentUserDefault())
-    following = serializers.SlugRelatedField(
-        queryset=User.objects.all(), slug_field='username')
-    recipe = SerializerMethodField()
-    recipes_count = SerializerMethodField(read_only=True)
-
+class Followerializer(serializers.ModelSerializer):
+    """ Сериализатор модели подписок"""
     class Meta:
         model = Follow
-        fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed',
-            'recipes',
-            'recipes_count'
-        )
+        fields = ('user', 'following')
         validators = (validators.UniqueTogetherValidator(
                       queryset=Follow.objects.all(),
                       fields=('user', 'following',),
                       message='Нельзя подписываться дважды на одного автора!'
                       ),)
 
-    def get_recipes(self, obj):
-        recipes = obj.recipes.all()
-        request = self.context.get('request')
-        limit = request.query_params.get('recipe_limit')
-        if limit:
-            recipes = obj.recipes.all()[:(int(limit))]
-        serializer = RecipeSubscribeSerializer(recipes, many=True)
-        print(serializer.data)
-        return serializer.data
-
-    def get_recipes_count(self, obj):
-        return obj.recipes.count()
-
-    def validate(self, data):
-        if self.context.get('request').user == data['following']:
-            raise serializers.ValidationError(
-                'Вы не можете быть подписаны на самого себя!')
-        return data
-
-
-#    def to_representation(self, instance):
-#       return SubscribedShowSerializer(instance.author, context={
-#          'request': self.context.get('request')
-#     }).data
+    def to_representation(self, instance):
+        return FollowShowSerializer(instance.author, context={
+                                    'request': self.context.get('request')
+                                    }).data
