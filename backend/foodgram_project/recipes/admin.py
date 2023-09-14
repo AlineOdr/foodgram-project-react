@@ -95,7 +95,6 @@ class TagRecipeAdmin(admin.ModelAdmin):
 
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'user',
         'following',
     )
