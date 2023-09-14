@@ -1,9 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from rest_framework import mixins, viewsets
-
 from recipes.models import (Favorite, Ingredient, Recipe, ShoppingCart, Tag,
                             User)
+from rest_framework import mixins, viewsets
 
 from .pagination import RecipesPagination
 from .permissions import IsAdmin, IsAdminOrReadOnly
