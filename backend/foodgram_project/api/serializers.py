@@ -20,11 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
             'is_subscribed'
         )
 
-#    def get_is_subscribed(self, obj):
-#        request = self.context.get('request')
-#        if request is None:
-#            return False
-#        return Follow.objects.filter(user=request.user.id).exists()
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request is None:
+            return False
+        return Follow.objects.filter(user=request.user.id).exists()
 
     def create(self, validated_data):
         """Создание нового пользователя"""
