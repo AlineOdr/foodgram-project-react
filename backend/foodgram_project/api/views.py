@@ -4,6 +4,7 @@ from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -17,8 +18,9 @@ from .serializers import (FavoriteSerializer, FollowSerializer,
 # from .filters import IngredientFilter
 
 
-class GetPostViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class GetPostDeleteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
+                           mixins.RetrieveModelMixin, viewsets.GenericViewSet,
+                           mixins.DestroyModelMixin):
     pass
 
 
@@ -30,15 +32,13 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
-
-#    def subscriptions(self, request):
-#       user = request.user
-#      queryset = User.objects.filter(following=user)
-#     page = self.paginate_queryset(queryset)
-#    serializer = SubscribedShowSerializer(
-#           page, many=True,
-#          context={'request': request})
-# return self.get_paginated_response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def subscriptions(self, request):
+        queryset = User.objects.filter(following=request.user)
+        page = self.paginate_queryset(queryset)
+        serializer = FollowSerializer(page, many=True,
+                                      context={'request': request})
+        return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -97,9 +97,12 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     serializer_class = FavoriteSerializer
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
-    pagination_class = RecipesPagination
+
+    def get_queryset(self):
+        authors = self.request.user.follower.values('author').all()
+        return User.objects.filter(id__in=authors).prefetch_related('recipes')
 
     def profile_follow(request, username):
         user = request.user
@@ -107,12 +110,3 @@ class FollowViewSet(viewsets.ModelViewSet):
         follow = Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer(follow)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-#     def get_serializer_class(self, request):
-#       user = request.user
-#      queryset = User.objects.filter(following=user)
-#     page = self.paginate_queryset(queryset)
-#    serializer = SubscribedShowSerializer(
-#           page, many=True,
-#          context={'request': request})
-# return self.get_paginated_response(serializer.data)
