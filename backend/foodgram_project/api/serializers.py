@@ -1,8 +1,9 @@
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (Favorite, Ingredient, IngredientRecipe,
-                            Recipe, ShoppingCart, Tag, User)
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingCart, Tag, User)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,11 +21,11 @@ class UserSerializer(serializers.ModelSerializer):
             'is_subscribed'
         )
 
-    def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request is None:
-            return False
-        return Follow.objects.filter(user=request.user.id).exists()
+#    def get_is_subscribed(self, obj):
+#        request = self.context.get('request')
+#        if request is None:
+#            return False
+#        return Follow.objects.filter(user=request.user.id).exists()
 
     def create(self, validated_data):
         """Создание нового пользователя"""
