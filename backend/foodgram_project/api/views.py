@@ -4,7 +4,6 @@ from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
 from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -32,13 +31,13 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
-    @action(detail=False, methods=['get'])
-    def subscriptions(self, request):
-        queryset = User.objects.filter(following=request.user)
-        page = self.paginate_queryset(queryset)
-        serializer = FollowSerializer(page, many=True,
-                                      context={'request': request})
-        return self.get_paginated_response(serializer.data)
+#   @action(detail=False, methods=['get'])
+#   def subscriptions(self, request):
+#        queryset = User.objects.filter(following=request.user)
+#        page = self.paginate_queryset(queryset)
+#        serializer = FollowSerializer(page, many=True,
+#                                      context={'request': request})
+#        return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -100,13 +99,38 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
 
+#    def get_queryset(self):
+#        authors = self.request.user.follower.values('author').all()
+#        return User.objects.filter(id__in=authors).prefetch_related('recipes')
+
+#    def profile_follow(request, username):
+#        user = request.user
+#        author = get_object_or_404(User, username=username)
+#        follow = Follow.objects.create(user=user, author=author)
+#        serializer = FollowSerializer(follow)
+#        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        authors = self.request.user.follower.values('author').all()
+        authors = self.request.user.subscribers.values('author').all()
         return User.objects.filter(id__in=authors).prefetch_related('recipes')
 
-    def profile_follow(request, username):
-        user = request.user
-        author = get_object_or_404(User, username=username)
-        follow = Follow.objects.create(user=user, author=author)
-        serializer = FollowSerializer(follow)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        author_id = self.kwargs.get('author_id')
+        context['recipes_limit'] = self.request.query_params.get(
+            'recipes_limit')
+        if author_id:
+            context['author'] = get_object_or_404(User, id=author_id)
+        context['user'] = self.request.user
+        return context
+
+    def perform_create(self, serializer):
+        user = self.get_serializer_context().get('user')
+        author = self.get_serializer_context().get('author')
+        serializer.save(user=user, author=author)
+
+    def destroy(self, request, author_id):
+        author = get_object_or_404(User, id=author_id)
+        instance = get_object_or_404(Follow, user=self.request.user,
+                                     author=author)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -212,6 +212,16 @@ class FollowSerializer(serializers.ModelSerializer):
                     message='Нельзя подписываться дважды на одного автора!'
                     ),)
 
+    def get_is_subscribed(self, obj):
+        user = self.context['request'].user
+        return obj.subscribed.filter(user=user).exists()
+
+    def create(self, validated_data):
+        user = self.context['user']
+        author = self.context['author']
+        Follow.objects.create(user=user, author=author)
+        return author
+
     def validate(self, data):
         if self.context.get('request').user == data['author']:
             raise serializers.ValidationError(
