@@ -6,7 +6,6 @@ from .models import (Favorite, Follow, Ingredient, IngredientRecipe, Recipe,
 
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-            'id',
             'email',
             'username',
             'first_name',
