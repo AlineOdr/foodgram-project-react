@@ -1,10 +1,10 @@
-from django.shortcuts import get_list_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
 from rest_framework import mixins, status, viewsets
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .pagination import RecipesPagination
@@ -31,13 +31,13 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
-#   @action(detail=False, methods=['get'])
-#   def subscriptions(self, request):
-#        queryset = User.objects.filter(following=request.user)
-#        page = self.paginate_queryset(queryset)
-#        serializer = FollowSerializer(page, many=True,
-#                                      context={'request': request})
-#        return self.get_paginated_response(serializer.data)
+#    @action(detail=False, methods=['get'])
+#    def subscriptions(self, request):
+#            queryset = Follow.objects.all()
+#            is_subscribed = self.request.query_params.get('is_subscribed')
+#            if self.request.user.is_authenticated and is_subscribed:
+#                queryset = queryset.filter(follower_user = self.request.user)
+#            return queryset
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
@@ -97,7 +97,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(GetPostDeleteViewSet):
+    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
+    permission_classes = (IsAuthenticated,)
     model = Follow
 
 #    def get_queryset(self):
@@ -111,7 +113,7 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        serializer = FollowSerializer(follow)
 #        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        return get_list_or_404(Follow, user_id=self.request.user)
+        return self.queryset.filter(user=self.request.user)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

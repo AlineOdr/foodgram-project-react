@@ -21,15 +21,15 @@ router.register(r'^recipes/(?P<recipe_id>\d+)/favorite',
                 FavoriteViewSet, basename='favorite')
 router.register(r'^users/subscriptions',
                 FollowViewSet,  basename='subscriptions')
-#    router.register(r'^users/(?P<author_id>\d+)/subscribe',
-#                CustomUserViewSet, basename='subscribe')
+router.register(r'^users/(?P<author_id>\d+)/subscribe',
+                FollowViewSet, basename='subscribe')
 
 urlpatterns = [
      #    path('users/subscriptions/', FollowViewSet.as_view({'get': 'list'}),
      #          name='subscriptions'),
-     path('users/<int:author_id>/subscribe/',
-          FollowViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
-          name='subscribe'),
+     #    path('users/<int:author_id>/subscribe/',
+     #     FollowViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
+     #     name='subscribe'),
      path('auth/', include('djoser.urls.authtoken')),
      path('', include(router.urls)),
 ]
