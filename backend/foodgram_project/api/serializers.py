@@ -214,7 +214,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        return obj.author.filter(user=user).exists()
+        return obj.author.get(user=user).exists()
 
     def create(self, validated_data):
         user = self.context['user']
