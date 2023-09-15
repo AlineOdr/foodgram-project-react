@@ -99,6 +99,7 @@ class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
     model = Follow
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -116,23 +117,23 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        follow = Follow.objects.create(user=user, author=author)
 #        serializer = FollowSerializer(follow)
 #        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+#    def get_queryset(self):
+#        return self.queryset.filter(user=self.request.user)
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        author_id = self.kwargs.get('author_id')
-        context['recipes_limit'] = self.request.query_params.get(
-            'recipes_limit')
-        if author_id:
-            context['author'] = get_object_or_404(User, id=author_id)
-        context['user'] = self.request.user
-        return context
+#    def get_serializer_context(self):
+#        context = super().get_serializer_context()
+#        author_id = self.kwargs.get('author_id')
+#        context['recipes_limit'] = self.request.query_params.get(
+#            'recipes_limit')
+#        if author_id:
+#            context['author'] = get_object_or_404(User, id=author_id)
+#        context['user'] = self.request.user
+#        return context
 
-    def perform_create(self, serializer):
-        user = self.get_serializer_context().get('user')
-        author = self.get_serializer_context().get('author')
-        serializer.save(user=user, author=author)
+#    def perform_create(self, serializer):
+#        user = self.get_serializer_context().get('user')
+#        author = self.get_serializer_context().get('author')
+#        serializer.save(user=user, author=author)
 
     def destroy(self, request, author_id):
         author = get_object_or_404(User, id=author_id)
