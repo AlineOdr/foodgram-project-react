@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .pagination import RecipesPagination
-from .permissions import AuthorAdminOrReadOnly, IsAdmin, IsAdminOrReadOnly
+from .permissions import AuthorAdminOrReadOnly, IsAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
