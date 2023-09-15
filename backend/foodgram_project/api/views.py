@@ -99,6 +99,12 @@ class FollowViewSet(GetPostDeleteViewSet):
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
     model = Follow
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.follower.all()
 
 #    def get_queryset(self):
 #        authors = self.request.user.follower.values('author').all()
