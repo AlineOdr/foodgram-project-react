@@ -31,13 +31,11 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
-#    @action(detail=False, methods=['get'])
-#    def subscriptions(self, request):
-#            queryset = Follow.objects.all()
-#            is_subscribed = self.request.query_params.get('is_subscribed')
-#            if self.request.user.is_authenticated and is_subscribed:
-#                queryset = queryset.filter(follower_user = self.request.user)
-#            return queryset
+    def subscriptions(self, request):
+        queryset = User.objects.filter(following_user=request.user)
+        serializer = FollowSerializer(self.paginate_queryset(queryset),
+                                      context={'request': request})
+        return self.get_paginated_response(serializer.data)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
