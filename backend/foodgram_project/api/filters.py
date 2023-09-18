@@ -1,14 +1,17 @@
-#    import django_filters
+from django_filters import rest_framework as filters
+from recipes.models import Recipe
 
-#    from recipes.models import Recipe
 
+class RecipeFilter(filters.FilterSet):
+    author = filters.CharFilter()
+    is_favorited = filters.BooleanFilter(method='get'
+                                         '_favorite')
 
-#    class RecipeFilter(django_filters.FilterSet):
-#    tags = django_filters.CharFilter(field_name='filter_tag')
-#    is_favorited = django_filters.CharFilter(method='get_is_favorited')
-#    is_in_shopping_cart = django_filters.CharFilter(method=
-#       'get_is_in_shopping_cart ')
+    class Meta:
+        model = Recipe
+        fields = "__all__"
 
-#    class Meta:
-#        model = Title
-#        fields = "__all__"
+    def get_favorite(self, queryset, value, name):
+        if value:
+            return queryset.filter(favorite_recipe__user=self.request.user)
+        return queryset

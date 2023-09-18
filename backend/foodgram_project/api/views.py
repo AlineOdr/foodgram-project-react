@@ -9,14 +9,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
+from .filters import RecipeFilter
 from .pagination import RecipesPagination
 from .permissions import AuthorAdminOrReadOnly, IsAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
                           UserSerializer)
-
-# from .filters import IngredientFilter
 
 
 class GetPostDeleteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
@@ -93,6 +92,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     pagination_class = RecipesPagination
 #    filterset_class = IngredientFilter
+    filterset_class = RecipeFilter
 
 #    def get_queryset(self):
 #        recipe = Recipe.objects.all()
