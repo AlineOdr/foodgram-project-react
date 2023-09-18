@@ -3,6 +3,7 @@ from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -27,11 +28,15 @@ class GetPostDeleteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+#    permission_classes = (IsAuthenticated,)
     lookup_field = 'username'
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
+    @action(
+        detail=True, permission_classes=[IsAuthenticated],
+        methods=["post", "delete"]
+    )
     def subscribe(self, request, **kwargs):
         user = request.user
         author = get_object_or_404(User, id=self.kwargs.get("id"))
@@ -55,6 +60,8 @@ class CustomUserViewSet(UserViewSet):
             )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, permission_classes=[IsAuthenticated],
+            methods=["GET"])
     def subscriptions(self, request):
         queryset = User.objects.filter(following_user=request.user)
         serializer = FollowSerializer(self.paginate_queryset(queryset),
