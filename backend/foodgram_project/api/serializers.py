@@ -1,7 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
                             Recipe, ShoppingCart, Tag, User)
-from rest_framework import serializers, validators
+from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 
@@ -187,11 +187,12 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
-    recipe = SerializerMethodField()
+    #    is_subscribed = serializers.SerializerMethodField()
+    recipes = SerializerMethodField()
     recipes_count = SerializerMethodField()
 
     class Meta:
+        model = User
         fields = (
             'email',
             'id',
@@ -199,41 +200,40 @@ class FollowSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'is_subscribed',
-            'recipe',
+            'recipes',
             'recipes_count'
         )
-        read_only_fields = ('email', 'id', 'username', 'first_name',
-                            'last_name', 'is_subscribed', 'recipes',
-                            'recipes_count')
-        model = User
-        validators = (validators.UniqueTogetherValidator(
-                    queryset=Follow.objects.all(),
-                    fields=('user', 'author',),
-                    message='Нельзя подписываться дважды на одного автора!'
-                    ),)
+#        read_only_fields = ('email', 'id', 'username', 'first_name',
+#                            'last_name', 'is_subscribed', 'recipes',
+#                            'recipes_count')
+#        validators = (validators.UniqueTogetherValidator(
+#                    queryset=Follow.objects.all(),
+#                    fields=('user', 'author',),
+#                    message='Нельзя подписываться дважды на одного автора!'
+#                    ),)
 
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        return obj.author.get(user=user).exists()
+#    def get_is_subscribed(self, obj):
+#        user = self.context['request'].user
+#        return obj.author.get(user=user).exists()
 
-    def create(self, validated_data):
-        user = self.context['user']
-        author = self.context['author']
-        Follow.objects.create(user=user, author=author)
-        return author
+#    def create(self, validated_data):
+#        user = self.context['user']
+#        author = self.context['author']
+#        Follow.objects.create(user=user, author=author)
+#        return author
 
-    def validate(self, data):
-        if self.context.get('request').user == data['author']:
-            raise serializers.ValidationError(
-                'Вы не можете быть подписаны на самого себя!')
-        return data
+#    def validate(self, data):
+#        if self.context.get('request').user == data['author']:
+#            raise serializers.ValidationError(
+#                'Вы не можете быть подписаны на самого себя!')
+#        return data
 
     def get_recipes(self, obj):
-        recipes = obj.recipes.all()
+        recipes = Recipe.objects.filter(author=obj)
         request = self.context.get('request')
-        limit = request.query_params.get('recipe_limit')
+        limit = request.GET.get('recipe_limit')
         if limit:
-            recipes = obj.recipes.all()[:(int(limit))]
+            recipes = recipes[:int(limit)]
         serializer = RecipeSubscribeSerializer(recipes, many=True)
         return serializer.data
 

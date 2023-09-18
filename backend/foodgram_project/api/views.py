@@ -6,6 +6,7 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from .pagination import RecipesPagination
 from .permissions import AuthorAdminOrReadOnly, IsAdminOrReadOnly
@@ -31,9 +32,33 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
+    def subscribe(self, request, **kwargs):
+        user = request.user
+        author = get_object_or_404(User, id=self.kwargs.get("id"))
+
+        if request.method == 'POST':
+            if author == user:
+                raise ValidationError(
+                    {'errors': 'Вы не можете быть подписаны на самого себя!'}
+                )
+            if Follow.objects.filter(user=user, author=author).exists():
+                raise ValidationError({'errors':
+                                       'Нельзя подписываться дважды'
+                                       'на одного автора!'})
+            serializer = FollowSerializer(
+                author, context={'request': request}
+            )
+            Follow.objects.create(user=user, author=author)
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def subscriptions(self, request):
         queryset = User.objects.filter(following_user=request.user)
         serializer = FollowSerializer(self.paginate_queryset(queryset),
+                                      many=True,
                                       context={'request': request})
         return self.get_paginated_response(serializer.data)
 
