@@ -89,6 +89,7 @@ class Recipe(models.Model):
     cooking_time = models.PositiveIntegerField()
 
     class Meta:
+        ordering = ['-pub_date']
         verbose_name = ('Рецепт')
         verbose_name_plural = ('Рецепты')
 
