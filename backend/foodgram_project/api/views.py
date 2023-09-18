@@ -110,10 +110,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return RecipeSerializer
 
     @action(detail=True, methods=["POST", "DELETE"],)
-    def favorite(self, request, id):
+    def favorite(self, request, pk):
         user = request.user
-        if not Favorite.objects.filter(user=user, recipe=id).exists():
-            recipe = get_object_or_404(Recipe, id=id)
+        if not Favorite.objects.filter(user=user, recipe=pk).exists():
+            recipe = get_object_or_404(Recipe, pk=pk)
             serializer = FavoriteSerializer(data=request.data)
             serializer.save(user=user, recipe=recipe)
             return Response(status=status.HTTP_201_CREATED)
