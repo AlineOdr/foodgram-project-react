@@ -109,8 +109,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
         # А если запрошенное действие — не 'list', применяем CatSerializer
         return RecipeSerializer
 
-    #   def perform_create(self, serializer):
-    #      serializer.save(author=self.request.user.id)
+    @action(detail=True, methods=["POST", "DELETE"],)
+    def favorite(self, request, id):
+        user = request.user
+        if not Favorite.objects.filter(user=user, recipe=id).exists():
+            recipe = get_object_or_404(Recipe, id=id)
+            serializer = FavoriteSerializer(data=request.data)
+            serializer.save(user=user, recipe=recipe)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(
+            "Рецепт удален из избранного", status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class ShoppingCartViewSet(viewsets.ModelViewSet):
@@ -121,9 +130,9 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 #        user = request.user
 
 
-class FavoriteViewSet(viewsets.ModelViewSet):
-    queryset = Favorite.objects.all()
-    serializer_class = FavoriteSerializer
+#    class FavoriteViewSet(viewsets.ModelViewSet):
+#    queryset = Favorite.objects.all()
+#    serializer_class = FavoriteSerializer
 
 
 class FollowViewSet(GetPostDeleteViewSet):

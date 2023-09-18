@@ -174,15 +174,19 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     """ Сериализатор модели избранных рецептов """
-    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all(),
-                                                write_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
-                                              write_only=True)
+    name = serializers.CharField(source='recipe.name', read_only=True)
+    image = serializers.CharField(source='recipe.image', read_only=True)
+    cooking_time = serializers.IntegerField(source='recipe.cooking_time',
+                                            read_only=True)
 
     class Meta:
         model = Favorite
-        fields = ('user',
-                  'recipe')
+        fields = (
+            "id",
+            "name",
+            "image",
+            "cooking_time"
+        )
         # нужно сделать отображение добавленного в избр
 
 
