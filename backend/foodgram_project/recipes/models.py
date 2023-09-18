@@ -87,6 +87,7 @@ class Recipe(models.Model):
         verbose_name=('Ингредиенты'),
     )
     cooking_time = models.PositiveIntegerField()
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
         ordering = ['-pub_date']
