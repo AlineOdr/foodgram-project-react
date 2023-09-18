@@ -14,5 +14,5 @@ class RecipeFilter(filters.FilterSet):
 
     def get_favorite(self, queryset, value, name):
         if value:
-            return queryset.filter(favorite_recipe__user=self.request.user)
+            return queryset.filter(favorite_recipes__user=self.request.user)
         return queryset
