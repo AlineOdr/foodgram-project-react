@@ -115,6 +115,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if not Favorite.objects.filter(user=user, recipe=pk).exists():
             recipe = get_object_or_404(Recipe, pk=pk)
             serializer = FavoriteSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             serializer.save(user=user, recipe=recipe)
             return Response(status=status.HTTP_201_CREATED)
         return Response(
