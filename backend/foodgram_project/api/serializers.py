@@ -239,7 +239,7 @@ class FollowSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_recipes_count(self, obj):
-        return obj.recipes.count()
+        return obj.recipe.count()
 #        validators = (validators.UniqueTogetherValidator(
 #                      queryset=Follow.objects.all(),
 #                      fields=('user', 'following',),
