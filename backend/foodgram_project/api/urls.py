@@ -29,6 +29,7 @@ urlpatterns = [
      #    path('users/<int:author_id>/subscribe/',
      #     FollowViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
      #     name='subscribe'),
+     path('', include('djoser.urls')),
      path('auth/', include('djoser.urls.authtoken')),
      path('', include(router.urls)),
 ]
