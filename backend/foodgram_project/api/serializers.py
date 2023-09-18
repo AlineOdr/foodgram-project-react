@@ -187,7 +187,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    #    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
     recipes = SerializerMethodField()
     recipes_count = SerializerMethodField()
 
