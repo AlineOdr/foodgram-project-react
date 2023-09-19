@@ -25,6 +25,7 @@ class GetPostDeleteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
 
 
 class CustomUserViewSet(UserViewSet):
+    """ Класс для кастомной модели юзера."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
 #    permission_classes = (IsAuthenticated,)
@@ -34,11 +35,11 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         detail=True, permission_classes=[IsAuthenticated],
-        methods=["post", "delete"]
+        methods=["POST", "DELETE"],
     )
-    def subscribe(self, request, **kwargs):
+    def subscribe(self, request, pk):
         user = request.user
-        author = get_object_or_404(User, id=self.kwargs.get("id"))
+        author = get_object_or_404(User, pk=self.kwargs.get("pk"))
 
         if request.method == 'POST':
             if author == user:
