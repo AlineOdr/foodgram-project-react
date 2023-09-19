@@ -37,6 +37,7 @@ class CustomUserViewSet(UserViewSet):
         methods=["POST", "DELETE"],
     )
     def subscribe(self, request, pk):
+        """ Подписка на пользоватедя."""
         user = request.user
         author = get_object_or_404(User, pk=pk)
 
