@@ -37,7 +37,7 @@ class CustomUserViewSet(UserViewSet):
         detail=True, permission_classes=[IsAuthenticated],
         methods=["POST", "DELETE"],
     )
-    def subscribe(self, request, pk):
+    def subscribe(self, request, **kwargs):
         user = request.user
         author = get_object_or_404(User, pk=self.kwargs.get("pk"))
 
@@ -178,9 +178,9 @@ class FollowViewSet(GetPostDeleteViewSet):
 #        author = self.get_serializer_context().get('author')
 #        serializer.save(user=user, author=author)
 
-    def destroy(self, request, author_id):
-        author = get_object_or_404(User, id=author_id)
-        instance = get_object_or_404(Follow, user=self.request.user,
-                                     author=author)
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#    def destroy(self, request, author_id):
+#        author = get_object_or_404(User, id=author_id)
+#        instance = get_object_or_404(Follow, user=self.request.user,
+#                                     author=author)
+#        instance.delete()
+#        return Response(status=status.HTTP_204_NO_CONTENT)
