@@ -247,7 +247,7 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         recipes = Recipe.objects.filter(author=obj)
         request = self.context.get('request')
-        limit = request.GET.get('recipe_limit')
+        limit = request.GET.get('recipes_limit')
         if limit:
             recipes = recipes[:int(limit)]
         serializer = RecipeSubscribeSerializer(recipes, many=True)
