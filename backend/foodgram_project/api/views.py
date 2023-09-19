@@ -135,6 +135,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 return Response(
                     serializer.data, status=status.HTTP_201_CREATED
                 )
+        return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
 class ShoppingCartViewSet(viewsets.ModelViewSet):
