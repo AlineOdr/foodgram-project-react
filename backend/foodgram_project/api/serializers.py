@@ -265,3 +265,22 @@ class FollowSerializer(serializers.ModelSerializer):
 #        return FollowShowSerializer(instance.author, context={
 #                                    'request': self.context.get('request')
 #                                    }).data
+
+#   class DownloadShoppingCart(serializers.ModelSerializer):
+#    is_subscribed = serializers.SerializerMethodField()
+#    recipes = SerializerMethodField()
+#    recipes_count = SerializerMethodField()
+#    username = serializers.CharField(source='user.username', read_only=True)
+
+#    class Meta:
+#        model = User
+#        fields = (
+#            'email',
+#            'id',
+#            'username',
+#            'first_name',
+#            'last_name',
+#            'is_subscribed',
+#            'recipes',
+#            'recipes_count'
+#        )

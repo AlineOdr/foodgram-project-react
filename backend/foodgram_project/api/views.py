@@ -58,6 +58,7 @@ class CustomUserViewSet(UserViewSet):
                 serializer.data,
                 status=status.HTTP_201_CREATED
             )
+        Follow.objects.filter(user=user, author=author).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, permission_classes=[IsAuthenticated],
@@ -198,3 +199,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
 #                                     author=author)
 #        instance.delete()
 #        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#    class DownloadShoppingCart(sviewsets.ModelViewSet):
+#    def get_shopping_cart(self, request):
+#        """ скачать список покупок."""
+#        user = request.user
+#        if request.method == "POST":
+#            if not ShoppingCart.objects.filter(user=user, recipe=pk).exists():
+#                recipe = get_object_or_404(Recipe, pk=pk)
+#                serializer = ShoppingCartSerializer(data=request.data)
+#                serializer.is_valid(raise_exception=True)
+#                serializer.save(user=user, recipe=recipe)
+#                return Response(
+#                    serializer.data, status=status.HTTP_201_CREATED
+#                )
+#        return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
