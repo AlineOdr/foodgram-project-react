@@ -93,7 +93,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (AuthorAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     pagination_class = RecipesPagination
-#    filterset_class = IngredientFilter
     filterset_class = RecipeFilter
 
 #    def get_queryset(self):
@@ -140,7 +139,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 
 #    class DownloadShoppingCart(sviewsets.ModelViewSet):
-#    пока не понимаю как реализовать
+#    пока не понимаю как реализовать (буду рада если подскажете ресурс,
+#    где про это почитать)
 #    def get_shopping_cart(self, request):
 #        """ скачать список покупок."""
 #        user = request.user
