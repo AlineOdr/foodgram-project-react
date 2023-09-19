@@ -24,11 +24,6 @@ router.register(r'recipes', RecipeViewSet, basename='recipes')
 #                FollowViewSet, basename='subscribe')
 
 urlpatterns = [
-     #    path('users/subscriptions/', FollowViewSet.as_view({'get': 'list'}),
-     #          name='subscriptions'),
-     #    path('users/<int:author_id>/subscribe/',
-     #     FollowViewSet.as_view({'post': 'create', 'delete': 'destroy'}),
-     #     name='subscribe'),
      path('auth/', include('djoser.urls.authtoken')),
      path('', include(router.urls))
      #     path('', include('djoser.urls'))
