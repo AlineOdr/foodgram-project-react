@@ -138,9 +138,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
-class ShoppingCartViewSet(viewsets.ModelViewSet):
-    queryset = ShoppingCart.objects.all()
-    serializer_class = ShoppingCartSerializer
+#    class ShoppingCartViewSet(viewsets.ModelViewSet):
+#    queryset = ShoppingCart.objects.all()
+#    serializer_class = ShoppingCartSerializer
 
 #    def downloadshopping_cart(self, request):
 #        user = request.user
@@ -151,18 +151,18 @@ class ShoppingCartViewSet(viewsets.ModelViewSet):
 #    serializer_class = FavoriteSerializer
 
 
-class FollowViewSet(GetPostDeleteViewSet):
-    queryset = Follow.objects.all()
-    serializer_class = FollowSerializer
-    permission_classes = (IsAuthenticated,)
-    model = Follow
+#    class FollowViewSet(GetPostDeleteViewSet):
+#    queryset = Follow.objects.all()
+#    serializer_class = FollowSerializer
+#    permission_classes = (IsAuthenticated,)
+#    model = Follow
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+#    def perform_create(self, serializer):
+#        serializer.save(user=self.request.user)
 
-    def get_queryset(self):
-        user = self.request.user
-        return user.follower.all()
+#    def get_queryset(self):
+#        user = self.request.user
+#        return user.follower.all()
 
 #    def get_queryset(self):
 #        authors = self.request.user.follower.values('author').all()
