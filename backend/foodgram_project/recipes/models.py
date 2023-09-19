@@ -36,7 +36,7 @@ class Ingredient(models.Model):
     units_of_measurement = models.TextField(
         max_length=200,
         verbose_name=('Единица измерения')
-        )
+    )
 
     class Meta:
         verbose_name = ('Ингредиент')
@@ -49,7 +49,7 @@ class Tag(models.Model):
     colour = models.CharField(
         max_length=200,
         verbose_name=('Цвет')
-        )
+    )
     slug = models.SlugField(max_length=255,
                             unique=True)
 

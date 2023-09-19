@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
         'username',
         'first_name',
         'last_name',
-        )
+    )
     empty_value_display = '-пусто-'
 
 
