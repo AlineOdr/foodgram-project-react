@@ -123,6 +123,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
             "Рецепт удален из избранного", status=status.HTTP_204_NO_CONTENT
         )
 
+    @action(detail=True, methods=["POST", "DELETE"],)
+    def shopping_cart(self, request, pk):
+        user = request.user
+        if request.method == "POST":
+            if not ShoppingCart.objects.filter(user=user, recipe=pk).exists():
+                recipe = get_object_or_404(Recipe, pk=pk)
+                serializer = ShoppingCartSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(user=user, recipe=recipe)
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED
+                )
+
 
 class ShoppingCartViewSet(viewsets.ModelViewSet):
     queryset = ShoppingCart.objects.all()

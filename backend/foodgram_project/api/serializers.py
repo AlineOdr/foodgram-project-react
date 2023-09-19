@@ -54,9 +54,18 @@ class RecipeSubscribeSerializer(serializers.ModelSerializer):
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Списка покупок """
+    name = serializers.CharField(source='recipe.name', read_only=True)
+    image = serializers.CharField(source='recipe.image', read_only=True)
+    cooking_time = serializers.IntegerField(source='recipe.cooking_time',
+                                            read_only=True)
     class Meta:
         model = ShoppingCart
-        fields = '__all__'
+        fields = (
+            "id",
+            "name",
+            "image",
+            "cooking_time"
+        )
         # нужно сделать отображение в списке покупок
 
 
