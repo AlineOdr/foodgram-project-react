@@ -67,46 +67,6 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             "image",
             "cooking_time"
         )
-        # нужно сделать отображение в списке покупок
-
-
-#    class FollowShowSerializer(serializers.ModelSerializer):
-#    """ Сериализатор модели Подписок (список). """
-#    is_subscribed = serializers.SerializerMethodField()
-#    recipe = SerializerMethodField()
-#    recipes_count = SerializerMethodField()
-
-#    class Meta:
-#        model = User
-#        fields = (
-#            'email',
-#            'id',
-#            'username',
-#            'first_name',
-#            'last_name',
-#            'is_subscribed',
-#            'recipes',
-#            'recipes_count'
-#        )
-
-#    def get_is_subscribed(self, obj):
-#        return (
-#            self.context.get('request').user.is_authenticated
-#            and Follow.objects.filter(user=self.context['request'].user,
-#                                      author=obj).exists())
-
-#    def get_recipes(self, obj):
-#        recipes = obj.recipes.all()
-#        request = self.context.get('request')
-#        limit = request.query_params.get('recipe_limit')
-#        if limit:
-#            recipes = obj.recipes.all()[:(int(limit))]
-#        serializer = RecipeSubscribeSerializer(recipes, many=True)
-#        print(serializer.data)
-#        return serializer.data
-
-#    def get_recipes_count(self, obj):
-#        return obj.recipes.count()
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -265,22 +225,3 @@ class FollowSerializer(serializers.ModelSerializer):
 #        return FollowShowSerializer(instance.author, context={
 #                                    'request': self.context.get('request')
 #                                    }).data
-
-#   class DownloadShoppingCart(serializers.ModelSerializer):
-#    is_subscribed = serializers.SerializerMethodField()
-#    recipes = SerializerMethodField()
-#    recipes_count = SerializerMethodField()
-#    username = serializers.CharField(source='user.username', read_only=True)
-
-#    class Meta:
-#        model = User
-#        fields = (
-#            'email',
-#            'id',
-#            'username',
-#            'first_name',
-#            'last_name',
-#            'is_subscribed',
-#            'recipes',
-#            'recipes_count'
-#        )

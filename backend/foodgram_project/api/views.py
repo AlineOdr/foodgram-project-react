@@ -1,3 +1,4 @@
+#    from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
@@ -139,78 +140,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
-#    class ShoppingCartViewSet(viewsets.ModelViewSet):
-#    queryset = ShoppingCart.objects.all()
-#    serializer_class = ShoppingCartSerializer
-
-#    def downloadshopping_cart(self, request):
-#        user = request.user
-
-
-#    class FavoriteViewSet(viewsets.ModelViewSet):
-#    queryset = Favorite.objects.all()
-#    serializer_class = FavoriteSerializer
-
-
-#    class FollowViewSet(GetPostDeleteViewSet):
-#    queryset = Follow.objects.all()
-#    serializer_class = FollowSerializer
-#    permission_classes = (IsAuthenticated,)
-#    model = Follow
-
-#    def perform_create(self, serializer):
-#        serializer.save(user=self.request.user)
-
-#    def get_queryset(self):
-#        user = self.request.user
-#        return user.follower.all()
-
-#    def get_queryset(self):
-#        authors = self.request.user.follower.values('author').all()
-#        return User.objects.filter(id__in=authors).prefetch_related('recipes')
-
-#    def profile_follow(request, username):
-#        user = request.user
-#        author = get_object_or_404(User, username=username)
-#        follow = Follow.objects.create(user=user, author=author)
-#        serializer = FollowSerializer(follow)
-#        return Response(serializer.data, status=status.HTTP_201_CREATED)
-#    def get_queryset(self):
-#        return self.queryset.filter(user=self.request.user)
-
-#    def get_serializer_context(self):
-#        context = super().get_serializer_context()
-#        author_id = self.kwargs.get('author_id')
-#        context['recipes_limit'] = self.request.query_params.get(
-#            'recipes_limit')
-#        if author_id:
-#            context['author'] = get_object_or_404(User, id=author_id)
-#        context['user'] = self.request.user
-#        return context
-
-#    def perform_create(self, serializer):
-#        user = self.get_serializer_context().get('user')
-#        author = self.get_serializer_context().get('author')
-#        serializer.save(user=user, author=author)
-
-#    def destroy(self, request, author_id):
-#        author = get_object_or_404(User, id=author_id)
-#        instance = get_object_or_404(Follow, user=self.request.user,
-#                                     author=author)
-#        instance.delete()
-#        return Response(status=status.HTTP_204_NO_CONTENT)
-
 #    class DownloadShoppingCart(sviewsets.ModelViewSet):
+#    пока не понимаю как реализовать
 #    def get_shopping_cart(self, request):
 #        """ скачать список покупок."""
 #        user = request.user
-#        if request.method == "POST":
-#            if not ShoppingCart.objects.filter(user=user, recipe=pk).exists():
-#                recipe = get_object_or_404(Recipe, pk=pk)
-#                serializer = ShoppingCartSerializer(data=request.data)
-#                serializer.is_valid(raise_exception=True)
-#                serializer.save(user=user, recipe=recipe)
-#                return Response(
-#                    serializer.data, status=status.HTTP_201_CREATED
-#                )
-#        return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
+#        ingredients = IngredientRecipe.object.filter(
+#        shopping_cart_recipes__recipe=user).
+#     values("ingredients__name",
+#                                    "ingredients__units_of_measurement")
+#        buffer = io.BytesIO()
+#        response FileResponse(open('shopping_list.txt'))
