@@ -36,10 +36,10 @@ class CustomUserViewSet(UserViewSet):
         detail=True, permission_classes=[IsAuthenticated],
         methods=["POST", "DELETE"],
     )
-    def subscribe(self, request, pk):
+    def subscribe(self, request, id):
         """ Подписка на пользоватедя."""
         user = request.user
-        author = get_object_or_404(User, pk=pk)
+        author = get_object_or_404(User, id=id)
 
         if request.method == 'POST':
             if author == user:
