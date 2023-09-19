@@ -30,7 +30,6 @@ class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 #    permission_classes = (IsAuthenticated,)
-#    lookup_field = 'username'
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
