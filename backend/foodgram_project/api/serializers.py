@@ -151,6 +151,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         return ShoppingCart.objects.filter(recipe=obj,
                                            user=request.user.id).exists()
 
+    def validate(self, data):
+        ingredients = self.context.get('ingridients')
+        ingredients_get = [ingredient['id'] for ingredient in ingredients]
+        if len(ingredients_get) == 0:
+            raise serializers.ValidationError(
+                'Рецепт не может быть без ингридиентов'
+            )
+        return data
+
 
 class FavoriteSerializer(serializers.ModelSerializer):
     """ Сериализатор модели избранных рецептов """
