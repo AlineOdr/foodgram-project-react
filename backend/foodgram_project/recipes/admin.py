@@ -38,6 +38,7 @@ class TagAdmin(admin.ModelAdmin):
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
+    min_num = 1
 
 
 class TagRecipeInline(admin.TabularInline):
@@ -53,7 +54,6 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
         'amount_of_ingredient'
     )
     list_filter = ('recipe', 'ingredient')
-    min_num = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):
