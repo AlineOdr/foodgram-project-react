@@ -140,7 +140,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(
                 'Такого рецепта нет в списке покупок.',
                 status=status.HTTP_400_BAD_REQUEST
-            )    
+            )
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
