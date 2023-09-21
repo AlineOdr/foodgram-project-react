@@ -52,6 +52,9 @@ class Ingredient(models.Model):
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
+    def __str__(self):
+        return f'{self.name}, {self.unit_of_measurement}'
+
 
 class Tag(models.Model):
     """Модель тега."""
