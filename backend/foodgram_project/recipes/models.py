@@ -35,22 +35,21 @@ class User(AbstractUser):
     )
 
     class Meta:
-        verbose_name = ('Пользователь')
-        verbose_name_plural = ('Пользователи')
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 
 class Ingredient(models.Model):
     """Модель ингредиентов."""
     name = models.CharField('Название', max_length=200)
-#    quantity = models.PositiveIntegerField()
     units_of_measurement = models.TextField(
         'Единица измерения',
         max_length=200,
     )
 
     class Meta:
-        verbose_name = ('Ингредиент')
-        verbose_name_plural = ('Ингредиенты')
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
 
 
 class Tag(models.Model):
@@ -65,8 +64,8 @@ class Tag(models.Model):
                             unique=True)
 
     class Meta:
-        verbose_name = ('Тег')
-        verbose_name_plural = ('Теги')
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
     def __str__(self) -> str:
         return self.name
@@ -103,8 +102,8 @@ class Recipe(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
-        verbose_name = ('Рецепт')
-        verbose_name_plural = ('Рецепты')
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
 
     def __str__(self) -> str:
         return self.name
@@ -127,26 +126,26 @@ class IngredientRecipe(models.Model):
     )
 
     class Meta:
-        verbose_name = ('Ингредиент, связанный с рецептом')
-        verbose_name_plural = ('Ингредиенты, связанные с рецептами')
+        verbose_name = 'Ингредиент, связанный с рецептом'
+        verbose_name_plural = 'Ингредиенты, связанные с рецептами'
 
 
 class TagRecipe(models.Model):
     """Модель ингредиентов, связанных с рецептами."""
     recipe = models.ForeignKey(
         Recipe,
-        verbose_name=('Рецепт'),
+        verbose_name='Рецепт',
         on_delete=models.CASCADE,
     )
     tag = models.ForeignKey(
         Tag,
-        verbose_name=('Тэг'),
+        verbose_name='Тэг',
         on_delete=models.CASCADE,
     )
 
     class Meta:
-        verbose_name = ('Тег, связанный с рецептом')
-        verbose_name_plural = ('Теги, связанные с рецептами')
+        verbose_name = 'Тег, связанный с рецептом'
+        verbose_name_plural = 'Теги, связанные с рецептами'
 
 
 class ShoppingCart(models.Model):
@@ -156,18 +155,18 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name='shopping_cart_user',
         null=True,
-        verbose_name=('Покупатель')
+        verbose_name='Покупатель'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='shopping_cart_recipes',
-        verbose_name=('Рецепт')
+        verbose_name='Рецепт'
     )
 
     class Meta:
-        verbose_name = ('Список покупок')
-        verbose_name_plural = ('Списки покупок')
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Списки покупок'
 
 
 class Favorite(models.Model):
@@ -176,18 +175,18 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='favorite',
-        verbose_name=('Пользователь')
+        verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='favorite_recipes',
-        verbose_name=('Рецепт в избранном')
+        verbose_name='Рецепт в избранном'
     )
 
     class Meta:
-        verbose_name = ('Избранное')
-        verbose_name_plural = ('Избранные')
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
 
 
 class Follow(models.Model):
@@ -205,8 +204,8 @@ class Follow(models.Model):
     )
 
     class Meta:
-        verbose_name = ('Подписчик')
-        verbose_name_plural = ('Подписчики')
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'
         constraints = [models.CheckConstraint(
             check=~models.Q(author=models.F('user')),
             name='cannot subscribe to yourself'),
