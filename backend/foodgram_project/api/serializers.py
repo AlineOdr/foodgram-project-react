@@ -1,8 +1,10 @@
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
-                            Recipe, ShoppingCart, Tag, User)
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+
+from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
+                            Recipe, ShoppingCart, Tag, User)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,9 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-#        if request.user.is_anonymous:
-#            return False
-#        return Follow.objects.filter(user=request.user, author=obj).exists()
         return request.user.is_authenticated and Follow.objects.filter(
             user=request.user,
             author=obj).exists()
@@ -142,9 +141,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_favorited(self, obj):
         """ Наличие рецепта в избранном. """
         request = self.context.get('request')
-#        if request.user.is_anonymous:
-#            return False
-#        return Favorite.objects.filter(recipe=obj, user=request.user).exists()
         return request.user.is_authenticated and Favorite.objects.filter(
             recipe=obj,
             user=request.user).exists()
@@ -152,10 +148,6 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_in_shopping_cart(self, obj):
         """ Наличие рецепта в списке покупок. """
         request = self.context.get('request')
-#        if request.user.is_anonymous:
-#            return False
-#        return ShoppingCart.objects.filter(recipe=obj,
-#                                           user=request.user.id).exists()
         return request.user.is_authenticated and ShoppingCart.objects.filter(
             recipe=obj,
             user=request.user.id).exists()
@@ -184,14 +176,12 @@ class FavoriteSerializer(serializers.ModelSerializer):
             "image",
             "cooking_time"
         )
-        # нужно сделать отображение добавленного в избр
 
 
 class FollowSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
     recipes = SerializerMethodField()
     recipes_count = SerializerMethodField()
-#    username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = User
@@ -205,9 +195,6 @@ class FollowSerializer(serializers.ModelSerializer):
             'recipes',
             'recipes_count'
         )
-#        read_only_fields = ('email', 'id', 'username', 'first_name',
-#                            'last_name', 'is_subscribed', 'recipes',
-#                            'recipes_count')
 #        validators = (validators.UniqueTogetherValidator(
 #                    queryset=Follow.objects.all(),
 #                    fields=('user', 'author',),
@@ -216,9 +203,6 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-#        if user.is_anonymous:
-#            return False
-#        return Follow.objects.filter(user=user, author=obj).exists()
         return request.user.is_authenticated and Follow.objects.filter(
             user=request.user,
             author=obj).exists()
@@ -250,8 +234,3 @@ class FollowSerializer(serializers.ModelSerializer):
 #                      fields=('user', 'following',),
 #                      message='Нельзя подписываться дважды на одного автора!'
 #                      ),)
-
-#    def to_representation(self, instance):
-#        return FollowShowSerializer(instance.author, context={
-#                                    'request': self.context.get('request')
-#                                    }).data
