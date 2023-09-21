@@ -149,11 +149,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_in_shopping_cart(self, obj):
         """ Наличие рецепта в списке покупок. """
         request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        return ShoppingCart.objects.filter(recipe=obj,
-                                           user=request.user.id).exists()
-
+#        if request.user.is_anonymous:
+#            return False
+#        return ShoppingCart.objects.filter(recipe=obj,
+#                                           user=request.user.id).exists()
+        return request.user.is_authenticated and ShoppingCart.objects.filter(
+            recipe=obj,
+            user=request.user.id).exists()
 #    def validate(self, data):
 #        ingredients = self.context.get('ingridients')
 #        ingredients_get = [ingredient['id'] for ingredient in ingredients]
