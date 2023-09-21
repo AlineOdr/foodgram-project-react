@@ -34,6 +34,10 @@ class User(AbstractUser):
         max_length=254
     )
 
+    class Meta:
+        verbose_name = ('Пользователь')
+        verbose_name_plural = ('Пользователи')
+
 
 class Ingredient(models.Model):
     """Модель ингредиентов."""
