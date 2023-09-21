@@ -117,7 +117,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                                 status=status.HTTP_201_CREATED)
         if Favorite.objects.filter(user=user, recipe=pk).delete()[0] == 0:
             return Response(
-                'Такого рецепта нет в избранном',
+                'Такого рецепта нет в избранном.',
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(
@@ -136,6 +136,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 return Response(
                     serializer.data, status=status.HTTP_201_CREATED
                 )
+        if ShoppingCart.objects.filter(user=user, recipe=pk).delete()[0] == 0:
+            return Response(
+                'Такого рецепта нет в списке покупок.',
+                status=status.HTTP_400_BAD_REQUEST
+            )    
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
