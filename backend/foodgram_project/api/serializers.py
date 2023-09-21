@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user.id
-        if user is None:
+        if user.is_anonymous:
             return False
         return Follow.objects.filter(user=user, author=obj).exists()
 
@@ -199,7 +199,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
-        if user is None:
+        if user.is_anonymous:
             return False
         return Follow.objects.filter(user=user, author=obj).exists()
 #    def create(self, validated_data):
