@@ -107,12 +107,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST", "DELETE"],)
     def favorite(self, request, pk):
         user = request.user
-        if not Favorite.objects.filter(user=user, recipe=pk).exists():
-            recipe = get_object_or_404(Recipe, pk=pk)
-            serializer = FavoriteSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user=user, recipe=recipe)
-            return Response(status=status.HTTP_201_CREATED)
+        if request.method == "POST":
+            if not Favorite.objects.filter(user=user, recipe=pk).exists():
+                recipe = get_object_or_404(Recipe, pk=pk)
+                serializer = FavoriteSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(user=user, recipe=recipe)
+                return Response(status=status.HTTP_201_CREATED)
         if Favorite.objects.filter(user=user, recipe=pk).delete()[0] == 0:
             return Response(
                 'Такого рецепта нет в избранном',
