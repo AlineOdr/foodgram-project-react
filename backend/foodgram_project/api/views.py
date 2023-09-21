@@ -113,7 +113,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(user=user, recipe=recipe)
             return Response(status=status.HTTP_201_CREATED)
-        if not Favorite.objects.filter(user=user, recipe=pk).delete():
+        if Favorite.objects.filter(user=user, recipe=pk).delete()[0] == 0:
             return Response(
                 'Такого рецепта нет в избранном',
                 status=status.HTTP_400_BAD_REQUEST
