@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -54,10 +55,16 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     """Модель тега."""
-    name = models.CharField('Название', max_length=200)
-    colour = models.CharField(
-        'Цвет',
+    name = models.CharField(
+        'Название',
         max_length=200,
+        unique=True,
+    )
+    colour = ColorField(
+        'Цвет',
+        format="hexa",
+        max_length=200,
+        unique=True,
     )
     slug = models.SlugField('Уникальный слаг',
                             max_length=255,
