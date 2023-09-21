@@ -22,7 +22,6 @@ class CustomUserViewSet(UserViewSet):
     """ Класс для кастомной модели юзера."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
-#    permission_classes = (IsAuthenticated,)
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
@@ -78,7 +77,6 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-#    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -89,19 +87,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
     pagination_class = RecipesPagination
     filterset_class = RecipeFilter
 
-#    def get_queryset(self):
-#        recipe = Recipe.objects.all()
-#        return recipe
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
-        # Если запрошенное действие (action)
-        #  — получение списка объектов ('list')
         if self.request.method == 'GET':
-            # ...то применяем CatListSerializer
             return RecipeSerializer
-        # А если запрошенное действие — не 'list', применяем CatSerializer
         return RecipeSerializer
 
     @action(detail=True, methods=["POST", "DELETE"],)

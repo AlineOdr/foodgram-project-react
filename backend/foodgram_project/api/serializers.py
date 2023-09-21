@@ -73,7 +73,11 @@ class IngredientSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Ингредиенты. """
     class Meta:
         model = Ingredient
-        fields = '__all__'
+        fields = (
+            "id",
+            "name",
+            "unit_of_measurement"
+        )
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -81,7 +85,12 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = (
+            "id",
+            "name",
+            "colour",
+            "slug"
+        )
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
