@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
                             Tag, User)
-from rest_framework import mixins, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -16,12 +16,6 @@ from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
                           UserSerializer)
-
-
-class GetPostDeleteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                           mixins.RetrieveModelMixin, viewsets.GenericViewSet,
-                           mixins.DestroyModelMixin):
-    pass
 
 
 class CustomUserViewSet(UserViewSet):
@@ -119,8 +113,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(user=user, recipe=recipe)
             return Response(status=status.HTTP_201_CREATED)
+        if not Favorite.objects.filter(user=user, recipe=pk).delete():
+            return Response(
+                'Такого рецепта нет в избранном',
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return Response(
-            "Рецепт удален из избранного", status=status.HTTP_204_NO_CONTENT
+            'Рецепт удален из избранного', status=status.HTTP_204_NO_CONTENT
         )
 
     @action(detail=True, methods=["POST", "DELETE"],)
