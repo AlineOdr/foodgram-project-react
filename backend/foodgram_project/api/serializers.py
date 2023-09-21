@@ -212,10 +212,13 @@ class FollowSerializer(serializers.ModelSerializer):
 #                    ),)
 
     def get_is_subscribed(self, obj):
-        user = self.context.get('request').user
-        if user.is_anonymous:
-            return False
-        return Follow.objects.filter(user=user, author=obj).exists()
+        request = self.context.get('request')
+#        if user.is_anonymous:
+#            return False
+#        return Follow.objects.filter(user=user, author=obj).exists()
+        return request.user.is_authenticated and Follow.objects.filter(
+            user=request.user,
+            author=obj).exists()
 #    def create(self, validated_data):
 #        user = self.context['user']
 #        author = self.context['author']
