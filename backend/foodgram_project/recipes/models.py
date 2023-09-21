@@ -1,4 +1,3 @@
-from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -60,10 +59,9 @@ class Tag(models.Model):
         max_length=200,
         unique=True,
     )
-    colour = ColorField(
-        'Цвет',
-        format="hexa",
-        max_length=200,
+    colour = models.CharField(
+        'Цвет(HEX-код)',
+        max_length=7,
         unique=True,
     )
     slug = models.SlugField('Уникальный слаг',
