@@ -5,11 +5,12 @@ from django.db import models
 class User(AbstractUser):
     """Модель пользователя."""
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = [
+    REQUIRED_FIELDS = (
         'username',
         'first_name',
         'last_name',
-        'password']
+        'password'
+    )
     username = models.CharField(
         unique=True,
         max_length=150,
