@@ -53,6 +53,7 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
         'amount_of_ingredient'
     )
     list_filter = ('recipe', 'ingredient')
+    min_num = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):

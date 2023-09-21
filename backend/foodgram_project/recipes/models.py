@@ -135,6 +135,7 @@ class IngredientRecipe(models.Model):
         'Количество ингредиента',
         validators=(
             MinValueValidator(1, 'Значение не может равняться 0.'),
+            MaxValueValidator(100, 'Значение должно быть меньше 100.'),
         )
 
     )
