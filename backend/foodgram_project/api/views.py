@@ -69,7 +69,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-    search_fields = ('name,')
+    search_fields = ('name',)
 
 
 class TagViewSet(viewsets.ModelViewSet):
