@@ -148,7 +148,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             amount=Sum('amount')
         )
         text = 'список'
-        for ing, ingredient in enumerate(ingredients, start=1):
+        for ing, ingredient in enumerate(ingredient, start=1):
             text += (
                 f'{ing}. {ingredient[0]} - '
                 f'{ingredient[1]} '
