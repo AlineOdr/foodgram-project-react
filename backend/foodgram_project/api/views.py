@@ -1,7 +1,9 @@
+from django.db.models import Sum
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Follow, Ingredient, Recipe, ShoppingCart,
-                            Tag, User)
+from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
+                            Recipe, ShoppingCart, Tag, User)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -135,15 +137,25 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
 
-#    class DownloadShoppingCart(sviewsets.ModelViewSet):
-#    пока не понимаю как реализовать (буду рада если подскажете ресурс,
-#    где про это почитать)
-#    def get_shopping_cart(self, request):
-#        """ скачать список покупок."""
-#        user = request.user
-#        ingredients = IngredientRecipe.object.filter(
-#        shopping_cart_recipes__recipe=user).
-#     values("ingredients__name",
-#                                    "ingredients__units_of_measurement")
-#        buffer = io.BytesIO()
-#        response FileResponse(open('shopping_list.txt'))
+class DownloadShoppingCart(viewsets.ModelViewSet):
+    """ Скачать список пользователя."""
+    def get_shopping_cart(self, request):
+        """ скачать список покупок."""
+        user = self.request.user
+        ingredients = IngredientRecipe.object.filter(
+            shopping_cart_recipes__recipe=user).values(
+            'ingredients__name',
+            'ingredients__units_of_measurement'
+        ).annotate(
+            amount=Sum('amount')
+        )
+        i = 'список'
+        for ing, ingredient in enumerate(ingredients, start=1):
+            i += (
+                f'{ing}. {ingredient[0]} - '
+                f'{ingredient[1]} '
+                f'{ingredient[2]}\n'
+            )
+        response = HttpResponse(i, content_type='text/plain',
+                                filename="shopping_list.txt")
+        return response
