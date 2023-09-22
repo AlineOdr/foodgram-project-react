@@ -136,6 +136,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, methods=['GET'])
     def get_shopping_cart(self, request):
         """ скачать список покупок."""
         user = self.request.user
@@ -146,13 +147,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).annotate(
             amount=Sum('amount')
         )
-        i = 'список'
+        text = 'список'
         for ing, ingredient in enumerate(ingredients, start=1):
-            i += (
+            text += (
                 f'{ing}. {ingredient[0]} - '
                 f'{ingredient[1]} '
                 f'{ingredient[2]}\n'
             )
-        response = HttpResponse(i, content_type='text/plain',
-                                filename="shopping_list.txt")
+        response = HttpResponse(text, content_type='text/plain')
+        response['Content-Disposition'] = (
+            'attachment; ' 'filename="shopping_list.txt"'
+        )
         return response

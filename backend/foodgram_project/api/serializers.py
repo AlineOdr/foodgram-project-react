@@ -160,33 +160,19 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe=obj,
             user=request.user.id).exists()
 
-    def validate_ingredient(self, data):
+    def validate_ingredient(self, ingredients):
         """Проверка ингредиентов."""
-        ingredients_data = data.get('recipes_ingredients')
-        ingredients_set = set()
-
-        for ingredient_data in ingredients_data:
-            ingredient = ingredient_data.get('ingredient')
-            amount_of_ingredient = ingredient_data.get('amount_of_ingredient')
-
-            if not ingredient:
-                raise serializers.ValidationError(
-                    'Необходимо указать ингредиент!'
-                )
-
-            if amount_of_ingredient is not None and amount_of_ingredient < 1:
-                raise serializers.ValidationError(
-                    'Количество ингредиентов не может равняться 0!'
-                )
-
-            ingredient_tuple = (ingredient.id, amount_of_ingredient)
-            if ingredient_tuple in ingredients_set:
-                raise serializers.ValidationError(
-                    'Данный ингредиент уже был добавлен!'
-                )
-            ingredients_set.add(ingredient_tuple)
-
-        return data
+        if not ingredients:
+            raise serializers.ValidationError(
+                'Необходимо указать ингредиент!'
+            )
+        for ingredient in ingredients:
+            amount_of_ingredient = ingredient.get('amount_of_ingredient')
+        if amount_of_ingredient >= 0:
+            raise serializers.ValidationError(
+                'Количество ингредиентов не может равняться 0!'
+            )
+        return ingredients
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
