@@ -68,6 +68,9 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
 
+    def get_favorited_count(self, obj):
+        return Favorite.objects.filter(recipe=obj).count()
+
 
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = (
