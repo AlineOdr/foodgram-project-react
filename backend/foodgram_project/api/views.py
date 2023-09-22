@@ -147,7 +147,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).annotate(
             amount_of_ingredient=Sum('amount_of_ingredient')
         )
-        text = 'список'
+        text = [f'Список покупок пользователя: {user.username}']
         for i in ingredient:
             text.append(
                 f'{i["name"]}: {i["amount_of_ingredient"]}'
