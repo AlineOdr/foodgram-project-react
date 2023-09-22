@@ -60,11 +60,10 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'name',
         'author',
     )
-    list_filter = ('name', 'author', 'tags')
+    list_filter = ('name', 'author', 'tags',)
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
 
