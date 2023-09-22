@@ -11,7 +11,7 @@ from rest_framework.serializers import ValidationError
 
 from .filters import RecipeFilter
 from .pagination import RecipesPagination
-from .permissions import AuthorAdminOrReadOnly, IsAdminOrReadOnly
+from .permissions import AuthorAdminOrReadOnly
 from .serializers import (FavoriteSerializer, FollowSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, TagSerializer,
@@ -67,7 +67,7 @@ class CustomUserViewSet(UserViewSet):
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = (DjangoFilterBackend,)
     search_fields = ('name',)
 
@@ -75,7 +75,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = (DjangoFilterBackend,)
 
 
