@@ -145,7 +145,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'ingredient__name',
             'ingredient__units_of_measurement'
         ).annotate(
-            amount_of_ingredient=Sum('amount')
+            amount_of_ingredient=Sum('amount_of_ingredient')
         )
         text = 'список'
         for ing, ingredient in enumerate(ingredient, start=1):
