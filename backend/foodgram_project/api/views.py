@@ -137,7 +137,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response('Рецепт удален!', status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['GET'])
-    def get_shopping_cart(self, request):
+    def download_shopping_cart(self, request):
         """ скачать список покупок."""
         user = self.request.user
         ingredients = IngredientRecipe.object.filter(
