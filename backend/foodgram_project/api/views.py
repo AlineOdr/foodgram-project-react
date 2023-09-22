@@ -148,13 +148,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             amount_of_ingredient=Sum('amount_of_ingredient')
         )
         text = 'список'
-        for ing, ingredient in enumerate(ingredient, start=1):
-            text += (
-                f'{ing}. {ingredient[0]} - '
-                f'{ingredient[1]} '
-                f'{ingredient[2]}\n'
-            )
-        response = HttpResponse(text, content_type='text/plain')
+        for i in ingredient:
+            text.append(
+                f'{i["name"]}: {i["amount_of_ingredient"]}'
+                '{i["unit_of_measurement"]}')
+        text = '\n'.join(text)
+        response = HttpResponse(text, content_type='text.txt')
         response['Content-Disposition'] = (
             'attachment; ' 'filename="shopping_list.txt"'
         )
