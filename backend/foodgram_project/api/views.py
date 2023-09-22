@@ -141,7 +141,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """ скачать список покупок."""
         user = self.request.user
         ingredients = IngredientRecipe.objects.filter(
-            shopping_cart_recipes__user=user).values(
+            ingredient__user=user).values(
             'ingredients__name',
             'ingredients__units_of_measurement'
         ).annotate(
