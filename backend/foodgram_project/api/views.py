@@ -151,7 +151,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for i in ingredient:
             text.append(
                 f'{i["ingredient__name"]}: {i["amount_of_ingredient"]}'
-                '{i["ingredient__unit_of_measurement"]}')
+                f'{i["ingredient__unit_of_measurement"]}')
         text = '\n'.join(text)
         response = HttpResponse(text, content_type='text.txt')
         response['Content-Disposition'] = (
