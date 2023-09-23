@@ -1,15 +1,18 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'wl75t@7f25$cdm^jxf8n)p7lkgt3_^aevwk9oj6su%+z5aqd0!'
+SECRET_KEY = os.getenv('SECRET_KEY', 'default')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['51.250.100.111', '127.0.0.1',
-                 'localhost', 'foodgramaline.hopto.org']
+ALLOWED_HOSTS = os.getenv('HOSTNAMES', '127.0.0.1,localhost').split(',')
 CSRF_TRUSTED_ORIGINS = ['https://foodgramaline.hopto.org']
 
 
