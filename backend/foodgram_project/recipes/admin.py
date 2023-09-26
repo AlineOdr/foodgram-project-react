@@ -1,7 +1,16 @@
 from django.contrib import admin
 
-from .models import (Favorite, Follow, Ingredient, IngredientRecipe, Recipe,
-                     ShoppingCart, Tag, TagRecipe, User)
+from .models import (
+    Favorite,
+    Follow,
+    Ingredient,
+    IngredientRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag,
+    TagRecipe,
+    User,
+)
 
 
 class UserAdmin(admin.ModelAdmin):

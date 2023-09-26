@@ -2,8 +2,16 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Favorite, Follow, Ingredient, IngredientRecipe,
-                            Recipe, ShoppingCart, Tag, User)
+from recipes.models import (
+    Favorite,
+    Follow,
+    Ingredient,
+    IngredientRecipe,
+    Recipe,
+    ShoppingCart,
+    Tag,
+    User,
+)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -14,10 +22,15 @@ from rest_framework.serializers import ValidationError
 from .filters import RecipeFilter
 from .pagination import RecipesPagination
 from .permissions import AuthorAdminOrAuthenticatedReadOnly
-from .serializers import (FavoriteSerializer, FollowSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShoppingCartSerializer, TagSerializer,
-                          UserSerializer)
+from .serializers import (
+    FavoriteSerializer,
+    FollowSerializer,
+    IngredientSerializer,
+    RecipeSerializer,
+    ShoppingCartSerializer,
+    TagSerializer,
+    UserSerializer,
+)
 
 
 class CustomUserViewSet(UserViewSet):
@@ -66,7 +79,7 @@ class CustomUserViewSet(UserViewSet):
         return self.get_paginated_response(serializer.data)
 
 
-class IngredientViewSet(viewsets.ModelViewSet):
+class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
@@ -74,7 +87,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
     search_fields = ('name',)
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
@@ -92,10 +105,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return RecipeSerializer
-        return RecipeSerializer
+#    def get_serializer_class(self):
+#        if self.request.method == 'GET':
+#            return RecipeSerializer
+#        return RecipeSerializer
 
     @action(detail=True, methods=["POST", "DELETE"],)
     def favorite(self, request, pk):
