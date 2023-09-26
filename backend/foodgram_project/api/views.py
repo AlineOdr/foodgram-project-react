@@ -160,12 +160,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'ingredient__name',
             'ingredient__units_of_measurement'
         ).annotate(
-            amount_of_ingredient=Sum('amount_of_ingredient')
+            amount=Sum('amount')
         )
         text = [f'Список покупок пользователя: {user.username}']
         for i in ingredient:
             text.append(
-                f'{i["ingredient__name"]}: {i["amount_of_ingredient"]}'
+                f'{i["ingredient__name"]}: {i["amount"]}'
                 f'{i["ingredient__units_of_measurement"]}')
         text = '\n'.join(text)
         response = HttpResponse(text, content_type='text.txt')

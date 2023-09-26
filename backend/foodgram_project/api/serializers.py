@@ -126,7 +126,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'units_of_measurement',
-            'amount_of_ingredient'
+            'amount'
         )
         validators = [
             UniqueTogetherValidator(
@@ -183,9 +183,9 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
 
         for ingredient in ingredients:
-            amount_of_ingredient = ingredient.get('amount_of_ingredient')
+            amount = ingredient.get('amount')
             ingredient = ingredient.get('ingredient')
-            ingredient_tuple = (ingredient.id, amount_of_ingredient)
+            ingredient_tuple = (ingredient.id, amount)
             ingredients_set = set()
             if ingredient_tuple in ingredients_set:
                 raise serializers.ValidationError(
@@ -236,8 +236,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             IngredientRecipe.objects.bulk_create([
                 IngredientRecipe(recipe=recipe,
                                  ingredient_id=ingredient.get('id'),
-                                 amountmount_of_ingredient=ingredient.get(
-                                    'amount_of_ingredient'))]
+                                 amount=ingredient.get(
+                                    'amount'))]
                                 )
 
     def create(self, validated_data):
