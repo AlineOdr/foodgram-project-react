@@ -7,6 +7,7 @@ from recipes.models import (
     Recipe,
     ShoppingCart,
     Tag,
+    TagRecipe,
     User,
 )
 from rest_framework import serializers
@@ -142,7 +143,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     image = Base64ImageField()
     ingredients = IngredientRecipeSerializer(many=True, read_only=True,
-                                             source='ingredientrecipe_set')
+                                             source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -209,6 +210,47 @@ class RecipeSerializer(serializers.ModelSerializer):
                     'Тег не может повторяться!'
                 )
         return tags
+
+
+class CreateRecipeSerializer(serializers.ModelSerializer):
+    """ Сериализатор модели Рецепты (Создание). """
+    tags = TagSerializer(many=True)
+    author = UserSerializer(read_only=True)
+    image = Base64ImageField()
+    ingredients = IngredientRecipeSerializer(many=True,
+                                             source='recipe_ingredients')
+
+    class Meta:
+        model = Recipe
+        fields = (
+            "ingredients",
+            "tags",
+            "image",
+            "name",
+            "text",
+            "cooking_time"
+        )
+
+    def create(self, validated_data):
+        author = self.context.get('request').user
+        ingredients = validated_data.pop('recipe_ingredients')
+        tags = validated_data.pop('tags')
+        recipe = Recipe.objects.create(**validated_data, author=author)
+        for ingredient in ingredients:
+            current_ingredient, status = Ingredient.objects.get_or_create(
+                **ingredient
+            )
+            IngredientRecipe.objects.create(
+                ingredient=current_ingredient, recipe=recipe
+            )
+        for tag in tags:
+            current_tag, status = Tag.objects.get_or_create(
+                **tag
+            )
+            TagRecipe.objects.create(
+                tag=current_tag, recipe=recipe
+            )
+        return recipe
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

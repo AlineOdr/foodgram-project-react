@@ -23,6 +23,7 @@ from .filters import RecipeFilter
 from .pagination import RecipesPagination
 from .permissions import AuthorAdminOrAuthenticatedReadOnly
 from .serializers import (
+    CreateRecipeSerializer,
     FavoriteSerializer,
     FollowSerializer,
     IngredientSerializer,
@@ -106,9 +107,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
+        #    без него не отображаются рецепты
         if self.request.method == 'GET':
             return RecipeSerializer
-        return RecipeSerializer
+        return CreateRecipeSerializer
 
     @action(detail=True, methods=["POST", "DELETE"],)
     def favorite(self, request, pk):
