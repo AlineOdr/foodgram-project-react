@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .validators import validate_color
+
 
 class User(AbstractUser):
     """Модель пользователя."""
@@ -67,6 +69,7 @@ class Tag(models.Model):
     )
     colour = models.CharField(
         'Цвет(HEX-код)',
+        validators=[validate_color],
         max_length=7,
         unique=True,
     )
