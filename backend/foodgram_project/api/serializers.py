@@ -119,10 +119,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     units_of_measurement = serializers.ReadOnlyField(
         source='ingredient.units_of_measurement'
     )
-    amount = models.PositiveSmallIntegerField(
-        'Количество',
-        validators=[MinValueValidator(1)]
-    )
 
     class Meta:
         model = IngredientRecipe

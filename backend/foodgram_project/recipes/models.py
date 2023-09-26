@@ -158,6 +158,9 @@ class IngredientRecipe(models.Model):
         verbose_name = 'Ингредиент, связанный с рецептом'
         verbose_name_plural = 'Ингредиенты, связанные с рецептами'
 
+    def __str__(self):
+        return self.ingredient.name
+
 
 class TagRecipe(models.Model):
     """Модель ингредиентов, связанных с рецептами."""
