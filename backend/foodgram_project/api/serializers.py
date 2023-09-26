@@ -194,6 +194,22 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredients_set.add(ingredient_tuple)
         return ingredients
 
+    def validate_tags(self, tags):
+        """Проверка тэгов."""
+        if not tags:
+            raise serializers.ValidationError(
+                'Необходимо указать тэг!'
+            )
+
+        for tag in tags:
+            try:
+                Tag.objects.get(id=tag.id)
+            except Tag.DoesNotExist:
+                raise serializers.ValidationError(
+                    'Тег не может повторяться!'
+                )
+        return tags
+
 
 class FavoriteSerializer(serializers.ModelSerializer):
     """ Сериализатор модели избранных рецептов """
