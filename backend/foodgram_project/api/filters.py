@@ -9,9 +9,9 @@ class RecipeFilter(filters.FilterSet):
     is_in_shopping_cart = filters.BooleanFilter(method='get_is_in_'
                                                        'shopping_cart')
     tags = filters.ModelMultipleChoiceFilter(
-        queryset=Tag.objects.all(),
         field_name='tags__slug',
-        to_field_name='slug'
+        to_field_name='slug',
+        queryset=Tag.objects.all()
     )
 
     class Meta:
