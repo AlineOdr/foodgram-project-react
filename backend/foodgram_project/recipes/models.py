@@ -10,7 +10,7 @@ class User(AbstractUser):
         'username',
         'first_name',
         'last_name',
-        'password'
+        'password',
     )
     username = models.CharField(
         'Имя пользователя',
