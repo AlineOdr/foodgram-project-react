@@ -40,6 +40,11 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 
+    def get_queryset(self):
+        if self.action == 'list':
+            return self.queryset
+        return super().get_queryset()
+
     @action(
         detail=True, permission_classes=[IsAuthenticated],
         methods=["POST", "DELETE"],
