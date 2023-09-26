@@ -62,7 +62,7 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
         'id',
         'recipe',
         'ingredient',
-        'amount_of_ingredient'
+        'amount'
     )
     list_filter = ('recipe', 'ingredient')
 

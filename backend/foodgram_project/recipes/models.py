@@ -145,7 +145,7 @@ class IngredientRecipe(models.Model):
         verbose_name='Ингредиент',
         on_delete=models.CASCADE,
     )
-    amount_of_ingredient = models.PositiveSmallIntegerField(
+    amount = models.PositiveSmallIntegerField(
         'Количество ингредиента',
         validators=(
             MinValueValidator(1, 'Значение не может равняться 0.'),
@@ -173,7 +173,7 @@ class TagRecipe(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Тег, связанный с рецептом'
+        verbose_name = 'Тэг, связанный с рецептом'
         verbose_name_plural = 'Теги, связанные с рецептами'
 
 
