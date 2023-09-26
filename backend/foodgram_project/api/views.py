@@ -105,10 +105,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-#    def get_serializer_class(self):
-#        if self.request.method == 'GET':
-#            return RecipeSerializer
-#        return RecipeSerializer
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return RecipeSerializer
+        return RecipeSerializer
 
     @action(detail=True, methods=["POST", "DELETE"],)
     def favorite(self, request, pk):
