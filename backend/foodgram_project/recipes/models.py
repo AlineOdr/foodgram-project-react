@@ -42,7 +42,9 @@ class User(AbstractUser):
 
 class Ingredient(models.Model):
     """Модель ингредиентов."""
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField(
+        'Название',
+        max_length=200)
     units_of_measurement = models.TextField(
         'Единица измерения',
         max_length=200,
@@ -68,9 +70,10 @@ class Tag(models.Model):
         max_length=7,
         unique=True,
     )
-    slug = models.SlugField('Уникальный слаг',
-                            max_length=255,
-                            unique=True)
+    slug = models.SlugField(
+        'Уникальный слаг',
+        max_length=255,
+        unique=True)
 
     class Meta:
         verbose_name = 'Тег'
@@ -86,9 +89,11 @@ class Recipe(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='recipe',
-        verbose_name=('Автор')
+        verbose_name='Автор'
     )
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField(
+        'Название',
+        max_length=200)
     image = models.ImageField(
         'Картинка',
         upload_to='recipe/'
@@ -97,12 +102,12 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
         through='TagRecipe',
-        verbose_name=('Теги')
+        verbose_name='Теги'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='IngredientRecipe',
-        verbose_name=('Ингредиенты'),
+        verbose_name='Ингредиенты',
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
@@ -111,7 +116,9 @@ class Recipe(models.Model):
             MaxValueValidator(1440, 'Значение должно быть меньше 1440.'),
         )
     )
-    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+    pub_date = models.DateTimeField(
+        'Дата публикации',
+        auto_now_add=True)
 
     class Meta:
         ordering = ('-pub_date',)
@@ -126,13 +133,13 @@ class IngredientRecipe(models.Model):
     """Модель ингредиентов, связанных с рецептами."""
     recipe = models.ForeignKey(
         Recipe,
-        verbose_name=('Рецепт'),
+        verbose_name='Рецепт',
         on_delete=models.CASCADE,
         related_name='recipes_ingredients',
     )
     ingredient = models.ForeignKey(
         Ingredient,
-        verbose_name=('Ингредиент'),
+        verbose_name='Ингредиент',
         on_delete=models.CASCADE,
     )
     amount_of_ingredient = models.PositiveSmallIntegerField(
@@ -173,7 +180,6 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='shopping_cart_user',
-        null=True,
         verbose_name='Покупатель'
     )
     recipe = models.ForeignKey(
