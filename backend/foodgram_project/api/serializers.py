@@ -168,18 +168,27 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe=obj,
             user=request.user.id).exists()
 
-    def validate_ingredient(self, ingredients):
+    def validate_ingredients(self, ingredients):
         """Проверка ингредиентов."""
         if not ingredients:
             raise serializers.ValidationError(
                 'Необходимо указать ингредиент!'
             )
+
         for ingredient in ingredients:
             amount_of_ingredient = ingredient.get('amount_of_ingredient')
-        if amount_of_ingredient >= 0:
-            raise serializers.ValidationError(
-                'Количество ингредиентов не может равняться 0!'
-            )
+            ingredient = ingredient.get('ingredient')
+            ingredient_tuple = (ingredient.id, amount_of_ingredient)
+            ingredients_set = set()
+            if ingredient_tuple in ingredients_set:
+                raise serializers.ValidationError(
+                    'Ингредиент не может повторяться!'
+                )
+            ingredients_set.add(ingredient_tuple)
+#        if amount_of_ingredient >= 0:
+#            raise serializers.ValidationError(
+#                'Количество ингредиентов не может равняться 0!'
+#            )
         return ingredients
 
 
