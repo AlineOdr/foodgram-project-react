@@ -11,6 +11,7 @@ from recipes.models import (
 )
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.validators import UniqueTogetherValidator
 
 #   делаю как ниже, но в action вылетает ошмбка isort (проходит только
 #    как выше)
@@ -127,6 +128,12 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
             'units_of_measurement',
             'amount_of_ingredient'
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=IngredientRecipe.objects.all(),
+                fields=('ingredient', 'recipe')
+            )
+        ]
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -185,10 +192,6 @@ class RecipeSerializer(serializers.ModelSerializer):
                     'Ингредиент не может повторяться!'
                 )
             ingredients_set.add(ingredient_tuple)
-#        if amount_of_ingredient >= 0:
-#            raise serializers.ValidationError(
-#                'Количество ингредиентов не может равняться 0!'
-#            )
         return ingredients
 
 
