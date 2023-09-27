@@ -96,7 +96,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "units_of_measurement"
+            "umeasurement_unit"
         )
 
 
@@ -117,8 +117,8 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     """ Сериализатор для связи модели Рецепты/Ингридиенты. """
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
-    units_of_measurement = serializers.ReadOnlyField(
-        source='ingredient.units_of_measurement'
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit'
     )
 
     class Meta:
@@ -126,7 +126,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'units_of_measurement',
+            'measurement_unit',
             'amount'
         )
 #        validators = [
@@ -226,7 +226,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         fields = (
             "ingredients",
             "tags",
-            "pub_date"
+            "pub_date",
             "author",
             "image",
             "name",
