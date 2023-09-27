@@ -1,4 +1,4 @@
-import datetime
+#    import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -127,7 +127,7 @@ class Recipe(models.Model):
         auto_now_add=True,
         blank=True,
         null=True,
-#        default=datetime.date.today
+        #        default=datetime.date.today
         )
 
     class Meta:
