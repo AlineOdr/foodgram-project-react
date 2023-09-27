@@ -11,6 +11,7 @@ from recipes.models import (  # TagRecipe,
 )
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+
 #    from rest_framework.validators import UniqueTogetherValidator
 
 #   делаю как ниже, но в action вылетает ошмбка isort (проходит только
