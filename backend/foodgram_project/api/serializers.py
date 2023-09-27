@@ -233,6 +233,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             "text",
             "cooking_time"
         )
+        read_only_fields = ("id", "author")
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
