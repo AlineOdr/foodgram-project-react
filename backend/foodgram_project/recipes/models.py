@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
+import datetime
 from .validators import validate_color
 
 
@@ -90,6 +90,7 @@ class Recipe(models.Model):
     """Модель рецепта."""
     author = models.ForeignKey(
         User,
+        default='default author',
         on_delete=models.CASCADE,
         related_name='recipe',
         verbose_name='Автор'
@@ -122,7 +123,10 @@ class Recipe(models.Model):
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now_add=True,
-        db_index=True)
+        blank=True,
+        null=True,
+        default=datetime.date.today
+        )
 
     class Meta:
         ordering = ('-pub_date',)
