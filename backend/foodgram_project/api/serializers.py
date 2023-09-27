@@ -215,7 +215,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 class CreateRecipeSerializer(serializers.ModelSerializer):
     """ Сериализатор модели Рецепты (Создание). """
     tags = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Tag.objects.all(), source='tag')
+        many=True, queryset=Tag.objects.all())
     author = UserSerializer(read_only=True)
     image = Base64ImageField()
     ingredients = IngredientRecipeSerializer(many=True,
