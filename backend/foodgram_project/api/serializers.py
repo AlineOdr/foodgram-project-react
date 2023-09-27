@@ -128,12 +128,12 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
             'units_of_measurement',
             'amount'
         )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=IngredientRecipe.objects.all(),
-                fields=('ingredient', 'recipe')
-            )
-        ]
+#        validators = [
+#            UniqueTogetherValidator(
+#                queryset=IngredientRecipe.objects.all(),
+#                fields=('ingredient', 'recipe')
+#            )
+#        ]
 
 
 class RecipeSerializer(serializers.ModelSerializer):
