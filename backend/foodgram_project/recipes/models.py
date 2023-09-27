@@ -193,7 +193,8 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='shopping_cart_user',
-        verbose_name='Покупатель'
+        verbose_name='Покупатель',
+        default=0
     )
     recipe = models.ForeignKey(
         Recipe,
