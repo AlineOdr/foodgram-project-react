@@ -11,7 +11,7 @@ from recipes.models import (  # TagRecipe,
 )
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.validators import UniqueTogetherValidator
+#    from rest_framework.validators import UniqueTogetherValidator
 
 #   делаю как ниже, но в action вылетает ошмбка isort (проходит только
 #    как выше)
@@ -242,7 +242,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         author = self.context.get('request').user
-        ingredients = validated_data.pop('ingredients')
+        ingredients = validated_data.pop('recipe_ingredientsexit')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data, author=author)
         recipe.tags.set(tags)
