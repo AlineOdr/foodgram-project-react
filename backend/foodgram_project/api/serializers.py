@@ -256,39 +256,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         ).data
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.image = validated_data.get('image', instance.image)
-        instance.text = validated_data.get('text', instance.text)
-        instance.cooking_time = validated_data.get(
-            'cooking_time', instance.cooking_time
-        )
-        if 'ingredients' not in validated_data:
-            instance.save()
-            return instance
-
         ingredients_data = validated_data.pop('ingredients')
-        lst = []
-        for ingredient in ingredients_data:
-            current_ingredient, status = Ingredient.objects.get_or_create(
-                **ingredient
-            )
-            lst.append(current_ingredient)
-        instance.ingredient.set(lst)
-
-        instance.save()
-        if 'tags' not in validated_data:
-            instance.save()
-            return instance
-
         tags_data = validated_data.pop('tags')
-        lst = []
-        for tag in tags_data:
-            current_tag, status = Tag.objects.get_or_create(**tag)
-            lst.append(current_tag)
-        instance.tag.set(lst)
-
-        instance.save()
-        return instance
+        instance.tags.set(tags_data)
+        self.create_ingredients(instance, ingredients_data)
+        return super().update(instance, validated_data)
+        
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
