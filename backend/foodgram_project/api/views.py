@@ -104,15 +104,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     pagination_class = RecipesPagination
     filterset_class = RecipeFilter
 
-    @action(
-        detail=True, permission_classes=[IsAuthenticated],
-        methods=["POST", "DELETE"],
-    )
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
     def get_serializer_class(self):
-        #    без него не отображаются рецепты
         if self.request.method == 'GET':
             return RecipeSerializer
         return CreateRecipeSerializer
