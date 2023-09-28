@@ -19,7 +19,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from .filters import RecipeFilter, IngredientFilter
+from .filters import IngredientFilter, RecipeFilter
 from .pagination import RecipesPagination
 from .permissions import AuthorAdminOrAuthenticatedReadOnly
 from .serializers import (
@@ -86,6 +86,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend,)
     search_fields = ('name',)
+    filterset_class = IngredientFilter
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
