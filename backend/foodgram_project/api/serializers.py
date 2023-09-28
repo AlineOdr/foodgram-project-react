@@ -154,6 +154,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             "tags",
             "author",
             "ingredients",
+            "is_favorited",
+            "is_in_shopping_cart",
             "name",
             "image",
             "text",
