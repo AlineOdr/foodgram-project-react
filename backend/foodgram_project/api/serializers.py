@@ -261,7 +261,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags_data)
         self.create_ingredients(instance, ingredients_data)
         return super().update(instance, validated_data)
-        
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
