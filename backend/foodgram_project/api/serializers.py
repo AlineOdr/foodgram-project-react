@@ -103,6 +103,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     """Сериализатор для связи модели Рецепты/Ингридиенты."""
 
     id = serializers.ReadOnlyField(source='ingredient.id')
+    amount = serializers.ReadOnlyField(source='ingredient.amount')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
@@ -194,6 +195,13 @@ class RecipeSerializer(serializers.ModelSerializer):
             except Tag.DoesNotExist:
                 raise serializers.ValidationError('Тег не может повторяться!')
         return tags
+
+
+class IngredientGetSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all().values_list('id', flat=True)
+    )
+    amount = serializers.IntegerField(min_value=1, max_value=1000)
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
