@@ -57,7 +57,7 @@ class Tag(models.Model):
         max_length=200,
         unique=True,
     )
-    color = ColorField(
+    colour = ColorField(
         'Цвет(HEX-код)',
         unique=True,
     )
@@ -184,16 +184,16 @@ class ShoppingCart(models.Model):
     class Meta:
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
-        constraints = [
-            models.CheckConstraint(
-                check=~models.Q(recipe=models.F('user')),
-                name='Нельзя рецепт добавить дважды в список покупок',
-            ),
-            models.UniqueConstraint(
-                name='unique_shopping_cart',
-                fields=['user', 'recipe'],
-            ),
-        ]
+#        constraints = [
+#            models.CheckConstraint(
+#                check=~models.Q(recipe=models.F('user')),
+#                name='Нельзя рецепт добавить дважды в список покупок',
+#            ),
+#            models.UniqueConstraint(
+#                name='unique_shopping_cart',
+#                fields=['user', 'recipe'],
+#            ),
+#        ]
 
 
 class Favorite(models.Model):
