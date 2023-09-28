@@ -250,7 +250,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         recipe.tags.set(tags)
         ingredients_list = []
         for ingredient in ingredients:
-            ingredient = ingredient.get_or_create('ingredient')
+            ingredient = ingredient.get('ingredient')
             amount = ingredient.get('amount')
             ingredients_list.append(
                 IngredientRecipe(
