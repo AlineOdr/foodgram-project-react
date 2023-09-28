@@ -321,7 +321,7 @@ class FollowSerializer(serializers.ModelSerializer):
     #        validators = (validators.UniqueTogetherValidator(
     #                    queryset=Follow.objects.all(),
     #                    fields=('user', 'author',),
-    #                    message='Нельзя подписываться дважды на одного автора!'
+    #           message='Нельзя подписываться дважды на одного автора!'
     #                    ),)
 
     def get_is_subscribed(self, obj):
