@@ -216,16 +216,16 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
-        constraints = [
-            models.CheckConstraint(
-                check=~models.Q(recipe=models.F('user')),
-                name='Нельзя рецепт добавить дважды в избранное',
-            ),
-            models.UniqueConstraint(
-                name='unique_favorite',
-                fields=['user', 'recipe'],
-            ),
-        ]
+#        constraints = [
+#            models.CheckConstraint(
+#                check=~models.Q(recipe=models.F('user')),
+#                name='Нельзя рецепт добавить дважды в избранное',
+#            ),
+#            models.UniqueConstraint(
+#                name='unique_favorite',
+#                fields=['user', 'recipe'],
+#            ),
+#        ]
 
 
 class Follow(models.Model):
