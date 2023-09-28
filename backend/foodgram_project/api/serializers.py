@@ -234,21 +234,32 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "author")
 
-    def create_ingredients(self, ingredients, recipe):
-        for ingredient in ingredients:
-            IngredientRecipe.objects.bulk_create([
-                IngredientRecipe(recipe=recipe,
-                                 ingredient=ingredient,
-                                 amount=ingredient.get(
-                                    'amount'))]
-                                )
+#    def create_ingredients(self, ingredients, recipe):
+#        for ingredient in ingredients:
+#            IngredientRecipe.objects.bulk_create([
+#                IngredientRecipe(recipe=recipe,
+#                                 ingredient=ingredient,
+#                                 amount=ingredient.get(
+#                                    'amount'))]
+#                                )
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        self.create_ingredients(ingredients, recipe)
+        ingredients_list = []
+        for ingredient_data in ingredients:
+            ingredient_id = ingredient_data['ingredient']['id']
+            current_amount = ingredient_data.get('amount')
+
+            ingredients_list.append(IngredientRecipe(recipe=recipe,
+                                                     ingredient=ingredient_id,
+                                                     amount=current_amount
+                                                     ))
+
+        IngredientRecipe.objects.bulk_create(ingredients_list)
+
         return recipe
 
     def update(self, instance, validated_data):
