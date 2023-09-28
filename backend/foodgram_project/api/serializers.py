@@ -96,7 +96,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ("id", "name", "colour", "slug")
+        fields = ("id", "name", "color", "slug")
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
@@ -199,7 +199,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all().values_list('id', flat=True)
+        queryset=Ingredient.objects.all()#.values_list('id', flat=True)
     )
     amount = serializers.IntegerField(min_value=1, max_value=1000)
 
@@ -250,20 +250,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        # ingredients_list = []
-        # for ingredient in ingredients:
-        #     ingredient = ingredient.get('ingredient')
-        #     amount = ingredient.get('amount')
-        #     ingredients_list.append(
-        #         IngredientRecipe(
-        #             recipe=recipe,
-        #             ingredient=ingredient,
-        #             amount=amount
-        #         )
-        #     )
-        # IngredientRecipe.objects.bulk_create(ingredients_list)
         self.create_ingredients(recipe, ingredients)
         return recipe
+    
+    def to_representation(self, instance):
+        return RecipeSerializer(
+            instance,
+            context={'request': self.context.get('request')}).data
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)

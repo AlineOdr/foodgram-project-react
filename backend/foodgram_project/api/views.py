@@ -38,6 +38,7 @@ class CustomUserViewSet(UserViewSet):
     """ Класс для кастомной модели юзера."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
     http_method_names = ['get', 'post', 'patch', 'delete']
     pagination_class = RecipesPagination
 

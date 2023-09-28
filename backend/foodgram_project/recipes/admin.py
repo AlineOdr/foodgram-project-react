@@ -38,7 +38,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'colour',
+        'color',
         'slug'
     )
     list_filter = ('name',)
