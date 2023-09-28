@@ -251,7 +251,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         recipe.tags.set(tags)
         self.create_ingredients(ingredients, recipe)
         return recipe
-    
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get(
             'name',
