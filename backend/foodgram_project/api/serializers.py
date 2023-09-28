@@ -269,25 +269,33 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             'cooking_time',
             instance.cooking_time
         )
+        if 'ingredients' not in validated_data:
+            instance.save()
+            return instance
 
-        ingredients = validated_data.get(
-            'recipe_ingredients'
-        )
-        instance.ingredients.clear()
-        for ingredient in ingredients:
-            ingredient = Ingredient.objects.get(
-                id=ingredient['ingredient']['id']
+        ingredients_data = validated_data.pop('recipe_ingredients')
+        lst = []
+        for ingredient in ingredients_data:
+            current_ingredient, status = Ingredient.objects.get_or_create(
+                **ingredient
             )
-            IngredientRecipe.objects.create(
-                recipe=instance,
-                ingredient=ingredient,
-                amount=ingredient.get('amount'),
+            lst.append(current_ingredient)
+        instance.ingredient.set(lst)
+
+        instance.save()
+        if 'tags' not in validated_data:
+            instance.save()
+            return instance
+
+        tags_data = validated_data.pop('tags')
+        lst = []
+        for tag in tags_data:
+            current_tag, status = Tag.objects.get_or_create(
+                **tag
             )
-        tags = validated_data.get('tags')
-        instance.tags.clear()
-        for tag in tags:
-            tag = Tag.objects.get(name=tag)
-            instance.tags.add(tag)
+            lst.append(current_tag)
+        instance.tag.set(lst)
+
         instance.save()
         return instance
 
