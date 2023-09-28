@@ -249,22 +249,47 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-#        for ingredient in ingredients:
-#            current_ingredient, status = Ingredient.objects.get_or_create(
-#                **ingredient
-#            )
-#            IngredientRecipe.objects.create(
-#                ingredient=current_ingredient, recipe=recipe
-#            )
-#        for tag in tags:
-#            current_tag, status = Tag.objects.get_or_create(
-#                **tag
-#            )
-#            TagRecipe.objects.create(
-#                tag=current_tag, recipe=recipe
-#            )
         self.create_ingredients(ingredients, recipe)
         return recipe
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get(
+            'name',
+            instance.name
+        )
+        instance.image = validated_data.get(
+            'image',
+            instance.image
+        )
+        instance.text = validated_data.get(
+            'text',
+            instance.text
+        )
+        instance.cooking_time = validated_data.get(
+            'cooking_time',
+            instance.cooking_time
+        )
+
+        ingredients = validated_data.get(
+            'recipe_ingredients'
+        )
+        instance.ingredients.clear()
+        for ingredient in ingredients:
+            ingredient = Ingredient.objects.get(
+                id=ingredient['ingredient']['id']
+            )
+            IngredientRecipe.objects.create(
+                recipe=instance,
+                ingredient=ingredient,
+                amount=ingredient.get('amount'),
+            )
+        tags = validated_data.get('tags')
+        instance.tags.clear()
+        for tag in tags:
+            tag = Tag.objects.get(name=tag)
+            instance.tags.add(tag)
+        instance.save()
+        return instance
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
