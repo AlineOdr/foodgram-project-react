@@ -12,18 +12,6 @@ from recipes.models import (  # TagRecipe,
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-#    from rest_framework.validators import UniqueTogetherValidator
-
-#   делаю как ниже, но в action вылетает ошмбка isort (проходит только
-#    как выше)
-#    from drf_extra_fields.fields import Base64ImageField
-#
-#    from rest_framework import serializers
-#    from rest_framework.fields import SerializerMethodField
-#
-#    from recipes.models import (Favorite, Follow, Ingredient,
-#                IngredientRecipe, Recipe, ShoppingCart, Tag, User)
-
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для пользователей ."""
@@ -114,16 +102,8 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-#        validators = [
-#            UniqueTogetherValidator(
-#                queryset=IngredientRecipe.objects.all(),
-#                fields=('ingredient', 'recipe')
-#            )
-#        ]
-
-
 class RecipeSerializer(serializers.ModelSerializer):
-    """Сериализатор модели Рецепты."""
+    """Сериализатор модели Рецепты(Чтение)."""
 
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
@@ -200,8 +180,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
+    """Сериализатор для связи модели Рецепты с Ингредиенты (Запись)."""
     id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all()  # .values_list('id', flat=True)
+        queryset=Ingredient.objects.all()
     )
     amount = serializers.IntegerField(min_value=1, max_value=1000)
 
@@ -297,30 +278,12 @@ class FollowSerializer(serializers.ModelSerializer):
             'recipes_count',
         )
 
-    #        validators = (validators.UniqueTogetherValidator(
-    #                    queryset=Follow.objects.all(),
-    #                    fields=('user', 'author',),
-    #           message='Нельзя подписываться дважды на одного автора!'
-    #                    ),)
-
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
         return (
             request.user.is_authenticated
             and Follow.objects.filter(user=request.user, author=obj).exists()
         )
-
-    #    def create(self, validated_data):
-    #        user = self.context['user']
-    #        author = self.context['author']
-    #        Follow.objects.create(user=user, author=author)
-    #        return author
-
-    #    def validate(self, data):
-    #        if self.context.get('request').user == data['author']:
-    #            raise serializers.ValidationError(
-    #                'Вы не можете быть подписаны на самого себя!')
-    #        return data
 
     def get_recipes(self, obj):
         recipes = Recipe.objects.filter(author=obj)
@@ -333,10 +296,3 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipe.count()
-
-
-#        validators = (validators.UniqueTogetherValidator(
-#                      queryset=Follow.objects.all(),
-#                      fields=('user', 'following',),
-#                      message='Нельзя подписываться дважды на одного автора!'
-#                      ),)
