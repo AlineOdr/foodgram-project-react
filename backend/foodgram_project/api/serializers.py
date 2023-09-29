@@ -103,7 +103,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     """Сериализатор для связи модели Рецепты/Ингридиенты."""
 
     id = serializers.ReadOnlyField(source='ingredient.id')
-    amount = serializers.ReadOnlyField(source='ingredient.amount')
+#    amount = serializers.ReadOnlyField(source='ingredient.amount')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
