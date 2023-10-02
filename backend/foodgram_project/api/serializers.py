@@ -149,36 +149,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             ).exists()
         )
 
-#    def validate_ingredients(self, ingredients):
-#        """Проверка ингредиентов."""
-#        if not ingredients:
-#            raise serializers.ValidationError('
-# Необходимо указать ингредиент!')
-#
-#        for ingredient in ingredients:
-#            amount = ingredient.get('amount')
-#            ingredient = ingredient.get('ingredient')
-#            ingredient_tuple = (ingredient.id, amount)
-#            ingredients_set = set()
-#            if ingredient_tuple in ingredients_set:
-#                raise serializers.ValidationError(
-#                    'Ингредиент не может повторяться!'
-#                )
-#            ingredients_set.add(ingredient_tuple)
-#        return ingredients
-
-#    def validate_tags(self, tags):
-#        """Проверка тэгов."""
-#        if not tags:
-#            raise serializers.ValidationError('Необходимо указать тэг!')
-#
-#        for tag in tags:
-#            try:
-#                Tag.objects.get(id=tag.id)
-#            except Tag.DoesNotExist:
-#                raise serializers.ValidationError('Тег не может повторяться!')
-#        return tags
-
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
     """Сериализатор для связи модели Рецепты с Ингредиенты (Запись)."""
@@ -260,9 +230,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         ingredients_data = validated_data.pop('ingredients', None)
         tags_data = validated_data.pop('tags', None)
-#        instance.tags.set(tags_data)
-#        self.create_ingredients(instance, ingredients_data)
-#        return super().update(instance, validated_data)
         instance.tags.clear()
         instance.tags.add(*tags_data)
         instance.ingredients.clear()

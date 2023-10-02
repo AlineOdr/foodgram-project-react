@@ -1,4 +1,3 @@
-#  from django import forms
 from django import forms
 from django.contrib import admin
 from django.forms.models import BaseInlineFormSet
@@ -14,12 +13,6 @@ from .models import (
     TagRecipe,
     User,
 )
-
-# from django.core.exceptions import ValidationError
-
-
-#    from django.forms.models import BaseInlineFormSet
-# from django.forms import BaseModelForm
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -57,34 +50,17 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
-#   class IngredientRecipeInlineForm(forms.ModelForm):
-#    def is_valid(self):
-#        return super(IngredientRecipeInlineForm, self).is_valid
-
-#    def clean(self):
-#        count = 0
-#        for form in self.forms:
-#            try:
-#                if form.cleaned_data and not form.cleaned_data.get(
-#                    'DELETE', False
-#                ):
-#                    count += 1
-#            except AttributeError:
-#                pass
-#        if count < 1:
-#            raise ValidationError(
-#                'Нельзя сохранить рецепт без тэгов и ингредиентов!'
-#            )
 class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
 
     def clean(self):
-        """Check that at least one service has been entered."""
+        """Убеждаемся, что введен хотя бы один тэг и ингредиент."""
         super(AtLeastOneIngredientOrTagInlineFormSet, self).clean()
         if any(self.errors):
             return
         if not any(cleaned_data and not cleaned_data.get('DELETE', False)
                    for cleaned_data in self.cleaned_data):
-            raise forms.ValidationError('At least one item required.')
+            raise forms.ValidationError('Нельзя сохранить рецепт'
+                                        'без тэгов и ингредиентов.')
 
 
 class TagRecipeInline(admin.TabularInline):
@@ -99,7 +75,6 @@ class IngredientRecipeInline(admin.TabularInline):
     extra = 1
     min_num = 1
     formset = AtLeastOneIngredientOrTagInlineFormSet
-#    formset = IngredientRecipeInlineForm
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -116,7 +91,6 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
-#   form = IngredientRecipeInlineForm
 
     def get_favorited_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
