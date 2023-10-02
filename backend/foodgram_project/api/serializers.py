@@ -177,7 +177,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "tags",
-#            "author",
+            #            "author",
             "ingredients",
             "name",
             "image",
