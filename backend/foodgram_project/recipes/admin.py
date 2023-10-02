@@ -65,7 +65,7 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
-class IngredientRecipeInlineForm(forms.Form):
+class IngredientRecipeInlineForm(forms.ModelForm):
     def is_valid(self):
         return super(IngredientRecipeInlineForm, self).is_valid
 
