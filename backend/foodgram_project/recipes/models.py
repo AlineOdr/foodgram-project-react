@@ -230,7 +230,7 @@ class Follow(models.Model):
         constraints = [
             models.CheckConstraint(
                 check=~models.Q(author=models.F('user')),
-                name='Нельзя подписаться дважды!',
+                name='Нельзя подписаться на самого себя!',
             ),
             models.UniqueConstraint(
                 name='unique_subscribe',
