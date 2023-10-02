@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.forms.models import BaseInlineFormSet
 
 from .models import (
     Favorite,
@@ -21,7 +23,10 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
     )
-    list_filter = ('username', 'email', )
+    list_filter = (
+        'username',
+        'email',
+    )
     empty_value_display = '-пусто-'
 
 
@@ -35,12 +40,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'name',
-        'color',
-        'slug'
-    )
+    list_display = ('id', 'name', 'color', 'slug')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
@@ -58,13 +58,28 @@ class TagRecipeInline(admin.TabularInline):
 
 
 class IngredientRecipeAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'recipe',
-        'ingredient',
-        'amount'
-    )
+    list_display = ('id', 'recipe', 'ingredient', 'amount')
     list_filter = ('recipe', 'ingredient')
+
+
+class IngredientRecipeInlineFormSet(BaseInlineFormSet):
+    def is_valid(self):
+        return super(IngredientRecipeInlineFormSet, self).is_valid
+
+    def clean(self):
+        count = 0
+        for form in self.forms:
+            try:
+                if form.cleaned_data and not form.cleaned_data.get(
+                    'DELETE', False
+                ):
+                    count += 1
+            except AttributeError:
+                pass
+        if count < 1:
+            raise ValidationError(
+                'Нельзя сохранить рецепт без тэгов и ингредиентов!'
+            )
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -74,9 +89,14 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
         'get_favorited_count',
     )
-    list_filter = ('name', 'author', 'tags',)
+    list_filter = (
+        'name',
+        'author',
+        'tags',
+    )
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
+    form = IngredientRecipeInlineFormSet
 
     def get_favorited_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
@@ -106,7 +126,10 @@ class TagRecipeAdmin(admin.ModelAdmin):
         'tag',
         'recipe',
     )
-    list_filter = ('recipe', 'tag',)
+    list_filter = (
+        'recipe',
+        'tag',
+    )
     empty_value_display = '-пусто-'
 
 
