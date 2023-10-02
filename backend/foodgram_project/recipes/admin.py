@@ -1,5 +1,7 @@
 #  from django import forms
+from django import forms
 from django.contrib import admin
+from django.forms.models import BaseInlineFormSet
 
 from .models import (
     Favorite,
@@ -79,12 +81,23 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
 #            raise ValidationError(
 #                'Нельзя сохранить рецепт без тэгов и ингредиентов!'
 #            )
+class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
+
+    def clean(self):
+        """Check that at least one service has been entered."""
+        super(AtLeastOneIngredientOrTagInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        if not any(cleaned_data and not cleaned_data.get('DELETE', False)
+                   for cleaned_data in self.cleaned_data):
+            raise forms.ValidationError('At least one item required.')
 
 
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
     min_num = 1
+    formset = AtLeastOneIngredientOrTagInlineFormSet
 #    formset = IngredientRecipeInlineForm
 
 
