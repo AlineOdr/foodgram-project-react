@@ -52,12 +52,6 @@ class TagAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class TagRecipeInline(admin.TabularInline):
-    model = TagRecipe
-    extra = 1
-    min_num = 1
-
-
 class IngredientRecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'recipe', 'ingredient', 'amount')
     list_filter = ('recipe', 'ingredient')
@@ -91,6 +85,13 @@ class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
         if not any(cleaned_data and not cleaned_data.get('DELETE', False)
                    for cleaned_data in self.cleaned_data):
             raise forms.ValidationError('At least one item required.')
+
+
+class TagRecipeInline(admin.TabularInline):
+    model = TagRecipe
+    extra = 1
+    min_num = 1
+    formset = AtLeastOneIngredientOrTagInlineFormSet
 
 
 class IngredientRecipeInline(admin.TabularInline):
