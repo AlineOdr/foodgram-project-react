@@ -59,7 +59,7 @@ class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
             return
         if not any(cleaned_data and not cleaned_data.get('DELETE', False)
                    for cleaned_data in self.cleaned_data):
-            raise forms.ValidationError('Нельзя сохранить рецепт'
+            raise forms.ValidationError('Нельзя сохранить рецепт '
                                         'без тэгов и ингредиентов.')
 
 
