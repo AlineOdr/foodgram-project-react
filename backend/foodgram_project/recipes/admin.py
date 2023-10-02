@@ -1,6 +1,6 @@
+from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.forms.models import BaseInlineFormSet
 
 from .models import (
     Favorite,
@@ -13,6 +13,9 @@ from .models import (
     TagRecipe,
     User,
 )
+
+#    from django.forms.models import BaseInlineFormSet
+# from django.forms import BaseModelForm
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -62,9 +65,9 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
-class IngredientRecipeInlineFormSet(BaseInlineFormSet):
+class IngredientRecipeInlineForm(forms.Form):
     def is_valid(self):
-        return super(IngredientRecipeInlineFormSet, self).is_valid
+        return super(IngredientRecipeInlineForm, self).is_valid
 
     def clean(self):
         count = 0
@@ -96,7 +99,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
-    form = IngredientRecipeInlineFormSet
+    form = IngredientRecipeInlineForm
 
     def get_favorited_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
