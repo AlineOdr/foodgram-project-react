@@ -184,13 +184,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             "text",
             "cooking_time",
         )
-        read_only_fields = ("id", "author")
         validators = [
             UniqueTogetherValidator(
                 queryset=Recipe.objects.all(),
                 fields=['author', 'name'],
                 message='Такой рецепт уже существует!')
         ]
+        read_only_fields = ("id", "author",)
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get("ingredients")
