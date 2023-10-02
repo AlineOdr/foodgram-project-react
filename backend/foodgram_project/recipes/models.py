@@ -57,7 +57,7 @@ class Tag(models.Model):
         max_length=200,
         unique=True,
     )
-    colour = ColorField(
+    color = ColorField(
         'Цвет(HEX-код)',
         unique=True,
     )

@@ -38,7 +38,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'colour',
+        'color',
         'slug'
     )
     list_filter = ('name',)
@@ -126,5 +126,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(IngredientRecipe, IngredientRecipeAdmin)
-admin.site.register(TagRecipe, TagRecipeAdmin)
 admin.site.register(Follow, FollowAdmin)
