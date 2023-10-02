@@ -263,8 +263,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 #        instance.tags.set(tags_data)
 #        self.create_ingredients(instance, ingredients_data)
 #        return super().update(instance, validated_data)
-        instance.tags_data.clear()
-        instance.tags_data.add(*tags_data)
+        instance.tags.clear()
+        instance.tags.add(*tags_data)
         self.create_ingredients(instance, ingredients_data)
         return super().update(instance, validated_data)
 
