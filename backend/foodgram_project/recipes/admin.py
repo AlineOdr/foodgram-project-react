@@ -48,12 +48,6 @@ class TagAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class IngredientRecipeInline(admin.TabularInline):
-    model = IngredientRecipe
-    extra = 1
-    min_num = 1
-
-
 class TagRecipeInline(admin.TabularInline):
     model = TagRecipe
     extra = 1
@@ -85,6 +79,13 @@ class IngredientRecipeInlineForm(forms.ModelForm):
             )
 
 
+class IngredientRecipeInline(admin.TabularInline):
+    model = IngredientRecipe
+    extra = 1
+    min_num = 1
+    formset = IngredientRecipeInlineForm
+
+
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -99,7 +100,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     inlines = (IngredientRecipeInline, TagRecipeInline)
     empty_value_display = '-пусто-'
-    form = IngredientRecipeInlineForm
+#   form = IngredientRecipeInlineForm
 
     def get_favorited_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
