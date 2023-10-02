@@ -61,7 +61,6 @@ class Tag(models.Model):
         'Название',
         max_length=200,
         unique=True,
-        unique=True,
         error_messages={
             'unique': 'Тег с таким названием уже существует!',
         },
@@ -72,7 +71,7 @@ class Tag(models.Model):
         error_messages={
             'unique': 'Тег с таким цветом уже существует!',
         },
-        (samples=COLOR_PALETTE)
+        choices=COLOR_PALETTE
     )
     slug = models.SlugField('Уникальный слаг', max_length=255, unique=True)
 
