@@ -217,7 +217,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, ingredients_data):
         """Проверка ингредиентов."""
-        ingredients = ingredients_data[0]['ingredient']
+        ingredients = ingredients_data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError('Необходимо указать ингредиент!')
         ingredient_id = [ingredient['id'] for ingredient in ingredients]
