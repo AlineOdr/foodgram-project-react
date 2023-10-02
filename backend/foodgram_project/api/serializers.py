@@ -1,5 +1,5 @@
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (  # TagRecipe,
+from recipes.models import (
     Favorite,
     Follow,
     Ingredient,
@@ -11,6 +11,7 @@ from recipes.models import (  # TagRecipe,
 )
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -91,7 +92,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     """Сериализатор для связи модели Рецепты/Ингридиенты."""
 
     id = serializers.ReadOnlyField(source='ingredient.id')
-#    amount = serializers.ReadOnlyField(source='ingredient.amount')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
@@ -185,6 +185,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             "cooking_time",
         )
         read_only_fields = ("id", "author")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Recipe.objects.all(),
+                fields=['author', 'name'],
+                message='Такой рецепт уже существует!')
+        ]
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get("ingredients")
