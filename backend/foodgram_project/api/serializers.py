@@ -149,34 +149,35 @@ class RecipeSerializer(serializers.ModelSerializer):
             ).exists()
         )
 
-    def validate_ingredients(self, ingredients):
-        """Проверка ингредиентов."""
-        if not ingredients:
-            raise serializers.ValidationError('Необходимо указать ингредиент!')
+#    def validate_ingredients(self, ingredients):
+#        """Проверка ингредиентов."""
+#        if not ingredients:
+#            raise serializers.ValidationError('
+# Необходимо указать ингредиент!')
+#
+#        for ingredient in ingredients:
+#            amount = ingredient.get('amount')
+#            ingredient = ingredient.get('ingredient')
+#            ingredient_tuple = (ingredient.id, amount)
+#            ingredients_set = set()
+#            if ingredient_tuple in ingredients_set:
+#                raise serializers.ValidationError(
+#                    'Ингредиент не может повторяться!'
+#                )
+#            ingredients_set.add(ingredient_tuple)
+#        return ingredients
 
-        for ingredient in ingredients:
-            amount = ingredient.get('amount')
-            ingredient = ingredient.get('ingredient')
-            ingredient_tuple = (ingredient.id, amount)
-            ingredients_set = set()
-            if ingredient_tuple in ingredients_set:
-                raise serializers.ValidationError(
-                    'Ингредиент не может повторяться!'
-                )
-            ingredients_set.add(ingredient_tuple)
-        return ingredients
-
-    def validate_tags(self, tags):
-        """Проверка тэгов."""
-        if not tags:
-            raise serializers.ValidationError('Необходимо указать тэг!')
-
-        for tag in tags:
-            try:
-                Tag.objects.get(id=tag.id)
-            except Tag.DoesNotExist:
-                raise serializers.ValidationError('Тег не может повторяться!')
-        return tags
+#    def validate_tags(self, tags):
+#        """Проверка тэгов."""
+#        if not tags:
+#            raise serializers.ValidationError('Необходимо указать тэг!')
+#
+#        for tag in tags:
+#            try:
+#                Tag.objects.get(id=tag.id)
+#            except Tag.DoesNotExist:
+#                raise serializers.ValidationError('Тег не может повторяться!')
+#        return tags
 
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
@@ -215,7 +216,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "author")
 
-    def validate(self, data):
+    def validate_ingredients(self, data):
         ingredients = self.initial_data.get("ingredients")
         ingredients_list = [ingredient['id'] for ingredient in ingredients]
         if len(ingredients_list) != len(set(ingredients_list)):
@@ -225,6 +226,18 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         if not ingredients:
             raise serializers.ValidationError('Необходимо указать ингредиент!')
         return data
+
+    def validate_tags(self, tags):
+        """Проверка тэгов."""
+        if not tags:
+            raise serializers.ValidationError('Необходимо указать тэг!')
+
+        for tag in tags:
+            try:
+                Tag.objects.get(id=tag.id)
+            except Tag.DoesNotExist:
+                raise serializers.ValidationError('Тег не может повторяться!')
+        return tags
 
     def create_ingredients(self, recipe, ingredients):
         IngredientRecipe.objects.bulk_create(
@@ -245,8 +258,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-        ingredients_data = validated_data.pop('ingredients')
-        tags_data = validated_data.pop('tags')
+        ingredients_data = validated_data.pop('ingredients', None)
+        tags_data = validated_data.pop('tags', None)
         instance.tags.set(tags_data)
         self.create_ingredients(instance, ingredients_data)
         return super().update(instance, validated_data)
