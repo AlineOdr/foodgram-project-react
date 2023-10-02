@@ -215,15 +215,16 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "author")
 
-    def validate_ingredients(self, ingredients_data):
-        """Проверка ингредиентов."""
-        ingredients = ingredients_data.get('ingredients')
+    def validate(self, data):
+        ingredients = self.initial_data.get("ingredients")
+        ingredients_list = [ingredient['id'] for ingredient in ingredients]
+        if len(ingredients_list) != len(set(ingredients_list)):
+            raise serializers.ValidationError(
+                'Ингредиент не может повторяться!'
+            )
         if not ingredients:
             raise serializers.ValidationError('Необходимо указать ингредиент!')
-        ingredient_id = [ingredient['id'] for ingredient in ingredients]
-        if len(set(ingredient_id)) != len(ingredient_id):
-            raise serializers.ValidationError('Ингредиент не'
-                                              'может повторяться!')
+        return data
 
     def create_ingredients(self, recipe, ingredients):
         IngredientRecipe.objects.bulk_create(
