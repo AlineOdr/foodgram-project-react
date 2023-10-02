@@ -1,6 +1,5 @@
-from django import forms
+#  from django import forms
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 
 from .models import (
     Favorite,
@@ -13,6 +12,9 @@ from .models import (
     TagRecipe,
     User,
 )
+
+# from django.core.exceptions import ValidationError
+
 
 #    from django.forms.models import BaseInlineFormSet
 # from django.forms import BaseModelForm
@@ -59,31 +61,31 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
-class IngredientRecipeInlineForm(forms.ModelForm):
-    def is_valid(self):
-        return super(IngredientRecipeInlineForm, self).is_valid
+#   class IngredientRecipeInlineForm(forms.ModelForm):
+#    def is_valid(self):
+#        return super(IngredientRecipeInlineForm, self).is_valid
 
-    def clean(self):
-        count = 0
-        for form in self.forms:
-            try:
-                if form.cleaned_data and not form.cleaned_data.get(
-                    'DELETE', False
-                ):
-                    count += 1
-            except AttributeError:
-                pass
-        if count < 1:
-            raise ValidationError(
-                'Нельзя сохранить рецепт без тэгов и ингредиентов!'
-            )
+#    def clean(self):
+#        count = 0
+#        for form in self.forms:
+#            try:
+#                if form.cleaned_data and not form.cleaned_data.get(
+#                    'DELETE', False
+#                ):
+#                    count += 1
+#            except AttributeError:
+#                pass
+#        if count < 1:
+#            raise ValidationError(
+#                'Нельзя сохранить рецепт без тэгов и ингредиентов!'
+#            )
 
 
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
     min_num = 1
-    formset = IngredientRecipeInlineForm
+#    formset = IngredientRecipeInlineForm
 
 
 class RecipeAdmin(admin.ModelAdmin):
