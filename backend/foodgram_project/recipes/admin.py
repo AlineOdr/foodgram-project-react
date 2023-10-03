@@ -108,7 +108,7 @@ class IngredientRecipeInlineFormset(forms.models.BaseInlineFormSet):
             raise NoIngredientException()
 
         if not ingredients:
-            raise 'Нельзы сохранить рецепт без ингредиента!'
+            raise NoIngredientException()
 
 
 class TagRecipeInlineFormset(forms.models.BaseInlineFormSet):
