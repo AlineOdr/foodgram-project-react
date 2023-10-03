@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.forms.models import BaseInlineFormSet
 
 from .models import (
     Favorite,
@@ -13,6 +12,8 @@ from .models import (
     TagRecipe,
     User,
 )
+
+# from django.forms.models import BaseInlineFormSet
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -50,47 +51,96 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
-class AtLeastNoDoubleIngredientOrTagInlineFormSet(BaseInlineFormSet):
+#    class AtLeastNoDoubleIngredientOrTagInlineFormSet(BaseInlineFormSet):
+#
+#    def clean(self):
+#        """Убеждаемся, что тэги и ингредиенты не дублируются."""
+#        cleaned_data = super().clean()
+#        true_tag = cleaned_data.get("tag")
+#        if true_tag:
+#            tags = Tag.objects.filter(tag_id=cleaned_data.get("tag_id"))
+#            for tag in tags:
+#                if tag.true_tag:
+#                    raise forms.ValidationError('Нельзя дважды '
+#                                                'выбрать один тэг!')
+#        return cleaned_data
+class IngredientRecipeInlineFormset(forms.models.BaseInlineFormSet):
 
     def clean(self):
-        """Убеждаемся, что тэги и ингредиенты не дублируются."""
-        cleaned_data = super().clean()
-        true_tag = cleaned_data.get("tag")
-        if true_tag:
-            tags = Tag.objects.filter(tag_id=cleaned_data.get("tag_id"))
-            for tag in tags:
-                if tag.true_tag:
-                    raise forms.ValidationError('Нельзя дважды '
-                                                'выбрать один тэг!')
-        return cleaned_data
+        super().clean()
+        ingredients = set()
+        delete_counter = 0
+        for form in self.forms:
+            ingredient = form.cleaned_data.get('ingredient')
+            amount = form.cleaned_data.get('amount')
+            delete = form.cleaned_data.get('DELETE')
+
+            if delete:
+                delete_counter += 1
+                continue
+
+            if ingredient and amount:
+                if ingredient not in ingredients:
+                    ingredients.add(ingredient)
+                    continue
+                raise 'Этот ингредиент уже добавлен!'
+        if delete_counter == len(self.forms):
+            raise 'Нельзы сохранить рецепт без ингредиента!'
+
+        if not ingredients:
+            raise 'Нельзы сохранить рецепт без ингредиента!'
 
 
-class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
-
+class TagRecipeInlineFormset(forms.models.BaseInlineFormSet):
     def clean(self):
-        """Убеждаемся, что введен хотя бы один тэг и ингредиент."""
-        super(AtLeastOneIngredientOrTagInlineFormSet, self).clean()
-        if any(self.errors):
-            return
-        if not any(cleaned_data and not cleaned_data.get('DELETE', False)
-                   for cleaned_data in self.cleaned_data):
-            raise forms.ValidationError('Нельзя сохранить рецепт '
-                                        'без тэгов и ингредиентов.')
+        super().clean()
+        tags = set()
+        delete_counter = 0
+        for form in self.forms:
+            tag = form.cleaned_data.get('tag')
+            delete = form.cleaned_data.get('DELETE')
+
+            if delete:
+                delete_counter += 1
+                continue
+
+            if tag:
+                if tag not in tags:
+                    tags.add(tag)
+                    continue
+                raise 'Этот тэг уже добавлен!'
+        if delete_counter == len(self.forms):
+            raise 'Нельзы сохранить рецепт без тэга!'
+
+        if not tags:
+            raise 'Нельзы сохранить рецепт без тэга!'
+        tags = set()
+
+#   class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
+#
+#    def clean(self):
+#        """Убеждаемся, что введен хотя бы один тэг и ингредиент."""
+#        super(AtLeastOneIngredientOrTagInlineFormSet, self).clean()
+#        if any(self.errors):
+#            return
+#        if not any(cleaned_data and not cleaned_data.get('DELETE', False)
+#                   for cleaned_data in self.cleaned_data):
+#            raise forms.ValidationError('Нельзя сохранить рецепт '
+#                                        'без тэгов и ингредиентов.')
 
 
 class TagRecipeInline(admin.TabularInline):
     model = TagRecipe
     extra = 1
     min_num = 1
-    formset = AtLeastOneIngredientOrTagInlineFormSet
+    formset = TagRecipeInlineFormset
 
 
 class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
     min_num = 1
-    formset = (AtLeastOneIngredientOrTagInlineFormSet,
-               AtLeastNoDoubleIngredientOrTagInlineFormSet)
+    formset = IngredientRecipeInlineFormset
 
 
 class RecipeAdmin(admin.ModelAdmin):
