@@ -1,4 +1,3 @@
-#    import datetime
 from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -106,9 +105,6 @@ class Recipe(models.Model):
     pub_date = models.DateTimeField(
         'Дата публикации',
         auto_now_add=True,
-        blank=True,
-        null=True,
-        #        default=datetime.date.today
     )
 
     class Meta:
@@ -145,12 +141,6 @@ class IngredientRecipe(models.Model):
     class Meta:
         verbose_name = 'Ингредиент, связанный с рецептом'
         verbose_name_plural = 'Ингредиенты, связанные с рецептами'
-        #        constraints = [
-        #            models.UniqueConstraint(
-        #                fields=['recipe', 'ingredient'],
-        #  name='unique_combination'
-        #            )
-        #        ]
 
     def __str__(self) -> str:
         return self.ingredient.name
@@ -183,7 +173,6 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name='shopping_cart_user',
         verbose_name='Покупатель',
-        default=0,
     )
     recipe = models.ForeignKey(
         Recipe,
