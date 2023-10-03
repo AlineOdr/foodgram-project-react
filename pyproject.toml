@@ -7,4 +7,4 @@ extend-exclude = 'tests|migrations'
 profile = "black"
 line_length = 79
 src_paths = ["backend"]
-extend_skip = ["tests", "migrations", "views"]
+extend_skip = ["tests", "migrations"]

@@ -64,6 +64,26 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
 #                    raise forms.ValidationError('Нельзя дважды '
 #                                                'выбрать один тэг!')
 #        return cleaned_data
+class IngredientNoDoubleException(forms.ValidationError):
+    def __init__(self):
+        super().__init__('Этот ингредиент уже добавлен')
+
+
+class NoIngredientException(forms.ValidationError):
+    def __init__(self):
+        super().__init__('Нельзы сохранить рецепт без ингредиента')
+
+
+class NoTagException(forms.ValidationError):
+    def __init__(self):
+        super().__init__('Нельзы сохранить рецепт без тэга')
+
+
+class TagNoDoubleException(forms.ValidationError):
+    def __init__(self):
+        super().__init__('Этот тэг уже добавлен')
+
+
 class IngredientRecipeInlineFormset(forms.models.BaseInlineFormSet):
 
     def clean(self):
@@ -83,9 +103,9 @@ class IngredientRecipeInlineFormset(forms.models.BaseInlineFormSet):
                 if ingredient not in ingredients:
                     ingredients.add(ingredient)
                     continue
-                raise 'Этот ингредиент уже добавлен!'
+                raise IngredientNoDoubleException()
         if delete_counter == len(self.forms):
-            raise 'Нельзы сохранить рецепт без ингредиента!'
+            raise NoIngredientException()
 
         if not ingredients:
             raise 'Нельзы сохранить рецепт без ингредиента!'
@@ -108,13 +128,12 @@ class TagRecipeInlineFormset(forms.models.BaseInlineFormSet):
                 if tag not in tags:
                     tags.add(tag)
                     continue
-                raise 'Этот тэг уже добавлен!'
+                raise TagNoDoubleException()
         if delete_counter == len(self.forms):
-            raise 'Нельзы сохранить рецепт без тэга!'
+            raise NoTagException()
 
         if not tags:
-            raise 'Нельзы сохранить рецепт без тэга!'
-        tags = set()
+            raise NoTagException()
 
 #   class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
 #
