@@ -2,13 +2,6 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
-from rest_framework.serializers import ValidationError
-
 from recipes.models import (
     Favorite,
     Follow,
@@ -19,6 +12,12 @@ from recipes.models import (
     Tag,
     User,
 )
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import RecipesPagination
