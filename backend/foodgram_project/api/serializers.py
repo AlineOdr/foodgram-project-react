@@ -1,4 +1,4 @@
-# from django.db import transaction
+from django.db import transaction
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (
     Favorite,
@@ -210,13 +210,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         if not tags:
             raise serializers.ValidationError('Необходимо указать тэг!')
 
-        #        for tag in tags:
-        #            try:
-        #                Tag.objects.get(id=tag.id)
-        #            except Tag.DoesNotExist:
-        #                raise serializers.ValidationError
-        # ('Тег не может повторяться!')
-        #        return tags
+        for tag in tags:
+            try:
+                Tag.objects.get(id=tag.id)
+            except Tag.DoesNotExist:
+                raise serializers.ValidationError('Тег не может повторяться!')
+        return tags
 
     def create_ingredients(self, recipe, ingredients):
         IngredientRecipe.objects.bulk_create(
@@ -231,9 +230,10 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients', None)
         tags = validated_data.pop('tags', None)
-        recipe = Recipe.objects.create(**validated_data)
-        recipe.tags.set(tags)
-        self.create_ingredients(recipe, ingredients)
+        with transaction.atomic():
+            recipe = Recipe.objects.create(**validated_data)
+            recipe.tags.set(tags)
+            self.create_ingredients(recipe, ingredients)
         return recipe
 
     def update(self, instance, validated_data):
