@@ -210,12 +210,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         if not tags:
             raise serializers.ValidationError('Необходимо указать тэг!')
 
-        for tag in tags:
-            try:
-                Tag.objects.get(id=tag.id)
-            except Tag.DoesNotExist:
-                raise serializers.ValidationError('Тег не может повторяться!')
-        return tags
+        #        for tag in tags:
+        #            try:
+        #                Tag.objects.get(id=tag.id)
+        #            except Tag.DoesNotExist:
+        #                raise serializers.ValidationError('Тег не может повторяться!')
+        #        return tags
 
     def create_ingredients(self, recipe, ingredients):
         IngredientRecipe.objects.bulk_create(

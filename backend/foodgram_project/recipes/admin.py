@@ -50,6 +50,21 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
     list_filter = ('recipe', 'ingredient')
 
 
+class AtLeastNoDoubleIngredientOrTagInlineFormSet(BaseInlineFormSet):
+
+    def clean(self):
+        """Убеждаемся, что тэги и ингредиенты не дублируются."""
+        cleaned_data = super().clean()
+        true_tag = cleaned_data.get("tag")
+        if true_tag:
+            tags = Tag.objects.filter(tag_id=cleaned_data.get("tag_id"))
+            for tag in tags:
+                if tag.true_tag:
+                    raise forms.ValidationError('Нельзя дважды '
+                                                'выбрать один тэг!')
+        return cleaned_data
+
+
 class AtLeastOneIngredientOrTagInlineFormSet(BaseInlineFormSet):
 
     def clean(self):
@@ -74,7 +89,8 @@ class IngredientRecipeInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 1
     min_num = 1
-    formset = AtLeastOneIngredientOrTagInlineFormSet
+    formset = (AtLeastOneIngredientOrTagInlineFormSet,
+               AtLeastNoDoubleIngredientOrTagInlineFormSet)
 
 
 class RecipeAdmin(admin.ModelAdmin):
