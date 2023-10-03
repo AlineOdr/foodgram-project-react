@@ -51,12 +51,6 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     """Модель тега."""
-    COLOR_PALETTE = [
-        ("#25D315", "Зеленый", ),
-        ("#D31D20", "Красный", ),
-        ("#5CD3BB", "Голубой", ),
-    ]
-
     name = models.CharField(
         'Название',
         max_length=200,
@@ -71,7 +65,6 @@ class Tag(models.Model):
         error_messages={
             'unique': 'Тег с таким цветом уже существует!',
         },
-        choices=COLOR_PALETTE
     )
     slug = models.SlugField('Уникальный слаг', max_length=255, unique=True)
 
