@@ -34,7 +34,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/sites-enabled/default
       - static:/static/
-      - ../docs/:/usr/share/nginx/html/api/docs/
+      - ../docs/:/static/api/docs
       - media:/media/
     ports:
       - 10000:80
