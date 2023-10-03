@@ -232,7 +232,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags', None)
         with transaction.atomic():
             recipe = Recipe.objects.create(**validated_data)
-            recipe.tags.set(tags[id])
+            recipe.tags.set(tags)
             self.create_ingredients(recipe, ingredients)
         return recipe
 
