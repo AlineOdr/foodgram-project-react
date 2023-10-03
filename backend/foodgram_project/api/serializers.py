@@ -1,5 +1,9 @@
 from django.db import transaction
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
+from rest_framework.validators import UniqueTogetherValidator
+
 from recipes.models import (
     Favorite,
     Follow,
@@ -10,9 +14,6 @@ from recipes.models import (
     Tag,
     User,
 )
-from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
-from rest_framework.validators import UniqueTogetherValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -153,9 +154,8 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
     """Сериализатор для связи модели Рецепты с Ингредиенты (Запись)."""
-    id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all()
-    )
+
+    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
     amount = serializers.IntegerField(min_value=1, max_value=1000)
 
     class Meta:
@@ -169,8 +169,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Tag.objects.all()
     )
-    author = UserSerializer(read_only=True,
-                            default=serializers.CurrentUserDefault())
+    author = UserSerializer(
+        read_only=True, default=serializers.CurrentUserDefault()
+    )
     image = Base64ImageField()
     ingredients = RecipeIngredientWriteSerializer(many=True)
 
@@ -190,9 +191,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=Recipe.objects.all(),
                 fields=['author', 'name'],
-                message='Такой рецепт уже существует!')
+                message='Такой рецепт уже существует!',
+            )
         ]
-        read_only_fields = ("id", "author",)
+        read_only_fields = (
+            "id",
+            "author",
+        )
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get("ingredients")
@@ -209,12 +214,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         """Проверка тэгов ."""
         if not tags:
             raise serializers.ValidationError('Необходимо указать тэг!')
-
-#        for tag in tags:
-#            try:
-#                Tag.objects.get(id=tag.id)
-#            except Tag.DoesNotExist:
-#                raise serializers.ValidationError('Тег не может повторяться!')
         return tags
 
     def create_ingredients(self, recipe, ingredients):
