@@ -215,7 +215,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 #                Tag.objects.get(id=tag.id)
 #            except Tag.DoesNotExist:
 #                raise serializers.ValidationError('Тег не может повторяться!')
-#        return tags
+        return tags
 
     def create_ingredients(self, recipe, ingredients):
         IngredientRecipe.objects.bulk_create(
