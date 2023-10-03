@@ -240,9 +240,10 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients', None)
         tags_data = validated_data.pop('tags', None)
         instance.tags.clear()
-        instance.tags.add(*tags_data)
-        instance.ingredients.clear()
-        self.create_ingredients(instance, ingredients_data)
+        with transaction.atomic():
+            instance.tags.add(*tags_data)
+            instance.ingredients.clear()
+            self.create_ingredients(instance, ingredients_data)
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
