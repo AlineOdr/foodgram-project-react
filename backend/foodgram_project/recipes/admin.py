@@ -110,7 +110,7 @@ class TagRecipeInlineFormset(forms.models.BaseInlineFormSet):
                 continue
 
             if tag:
-                if tag not in tags:
+                if tag not in tags or tag == tag.upper():
                     tags.add(tag)
                     continue
                 raise TagNoDoubleException()
