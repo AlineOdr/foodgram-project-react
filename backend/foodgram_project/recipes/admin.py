@@ -38,16 +38,7 @@ class IngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class TagForm(forms.ModelForm):
-    class Meta:
-        model = Tag
-        fields = ('id', 'name', 'slug', 'color')
-        widgets = {'color': forms.CheckboxSelectMultiple(attrs={
-            'type': 'color'}), }
-
-
 class TagAdmin(admin.ModelAdmin):
-    form = TagForm
     list_display = ('id', 'name', 'color', 'slug')
     list_filter = ('name',)
     empty_value_display = '-пусто-'

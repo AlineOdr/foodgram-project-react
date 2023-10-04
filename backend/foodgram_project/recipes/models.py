@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from .validators import validate_color
+
 
 class User(AbstractUser):
     """Модель пользователя."""
@@ -61,6 +63,7 @@ class Tag(models.Model):
     color = ColorField(
         'Цвет(HEX-код)',
         unique=True,
+        validators=[validate_color],
         error_messages={
             'unique': 'Тег с таким цветом уже существует!',
         },
