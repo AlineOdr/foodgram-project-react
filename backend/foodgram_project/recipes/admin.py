@@ -42,7 +42,8 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('id', 'name', 'slug', 'color')
-        widgets = {'color': forms.TextInput(attrs={'type': 'color'}), }
+        widgets = {'color': forms.CheckboxSelectMultiple(attrs={
+            'type': 'color'}), }
 
 
 class TagAdmin(admin.ModelAdmin):
