@@ -1,9 +1,11 @@
 from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxValueValidator,
+    MinValueValidator,
+    RegexValidator,
+)
 from django.db import models
-
-from .validators import validate_color
 
 
 class User(AbstractUser):
@@ -63,10 +65,12 @@ class Tag(models.Model):
     color = ColorField(
         'Цвет(HEX-код)',
         unique=True,
-        validators=[validate_color],
         error_messages={
             'unique': 'Тег с таким цветом уже существует!',
         },
+        validators=[RegexValidator('^[A-Z_]*$',
+                                   'Допускаются только заглавные '
+                                   'буквы и подчеркивания.')],
     )
     slug = models.SlugField('Уникальный слаг', max_length=255, unique=True)
 
