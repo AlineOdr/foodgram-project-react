@@ -38,7 +38,15 @@ class IngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ('id', 'name', 'slug', 'color')
+        widgets = {'color': forms.TextInput(attrs={'type': 'color'}), }
+
+
 class TagAdmin(admin.ModelAdmin):
+    form = TagForm
     list_display = ('id', 'name', 'color', 'slug')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
@@ -110,7 +118,7 @@ class TagRecipeInlineFormset(forms.models.BaseInlineFormSet):
                 continue
 
             if tag:
-                if tag not in tags or tag == tag.upper():
+                if tag not in tags:
                     tags.add(tag)
                     continue
                 raise TagNoDoubleException()
